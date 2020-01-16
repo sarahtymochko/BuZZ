@@ -65,10 +65,11 @@ setup(
           # 'sys',
           'scipy',
           # 'subprocess',
-          # 'time',
+          'time',
           'sklearn',
           'pandas',
-          'dionysus'
+          'dionysus',
+          'ripser'
       ],
 
       include_package_data=True,

@@ -40,7 +40,7 @@ extensions = [
 ]
 
 # need this for some reason, otherwise you get errors when it can't import these
-autodoc_mock_imports = ['numpy', 'matplotlib','scipy','pandas','ripser','sklearn','dionysus']
+autodoc_mock_imports = ['numpy', 'matplotlib','scipy','pandas','ripser','sklearn','dionysus','time']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
