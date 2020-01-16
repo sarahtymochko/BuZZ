@@ -1,0 +1,12 @@
+Classes
+=======
+
+.. toctree::
+   :caption: Classes:
+
+Persistence Diagram
+________________________________
+.. autoclass:: PersDgm.PD
+   :members: __init__, __str__, drawDgm, drawDgm_BL, removeInfiniteClasses, maxPers, toBirthLifetime
+
+

@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Classes &mdash; ZZPers 2020 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to ZZPers’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ZZPers
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#persistence-diagram">Persistence Diagram</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ZZPers</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Classes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/classes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="classes">
+<h1>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="persistence-diagram">
+<h2>Persistence Diagram<a class="headerlink" href="#persistence-diagram" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PersDgm.PD">
+<em class="property">class </em><code class="sig-prename descclassname">PersDgm.</code><code class="sig-name descname">PD</code><span class="sig-paren">(</span><em class="sig-param">dgm</em>, <em class="sig-param">dimension</em><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="PersDgm.PD.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">dgm</em>, <em class="sig-param">dimension</em><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dgm</strong> – kx2 numpy array containing birth death coordinates of the diagram</p></li>
+<li><p><strong>dim</strong> – dimension of the diagram</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="PersDgm.PD.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nicely prints.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PersDgm.PD.drawDgm">
+<code class="sig-name descname">drawDgm</code><span class="sig-paren">(</span><em class="sig-param">boundary=None</em>, <em class="sig-param">epsilon=0.5</em>, <em class="sig-param">color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.drawDgm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots persistence diagram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>boundary</strong> – The diagram is drawn on [0,boundary]x[0,boundary].</p></li>
+<li><p><strong>epsilon</strong> – If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.</p></li>
+<li><p><strong>color</strong> – Color for plotting points in diagram.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="PersDgm.PD.drawDgm_BL">
+<code class="sig-name descname">drawDgm_BL</code><span class="sig-paren">(</span><em class="sig-param">boundary=None</em>, <em class="sig-param">epsilon=0.5</em>, <em class="sig-param">color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.drawDgm_BL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots persistence diagram in birth-lifetime coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>boundary</strong> – The diagram is drawn on [0,boundary]x[0,boundary].</p></li>
+<li><p><strong>epsilon</strong> – If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.</p></li>
+<li><p><strong>color</strong> – Color for plotting points in diagram.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="PersDgm.PD.maxPers">
+<code class="sig-name descname">maxPers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.maxPers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates maximum persistence of the diagram.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PersDgm.PD.removeInfiniteClasses">
+<code class="sig-name descname">removeInfiniteClasses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.removeInfiniteClasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simply deletes classes that have infinite lifetimes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PersDgm.PD.toBirthLifetime">
+<code class="sig-name descname">toBirthLifetime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PersDgm.PD.toBirthLifetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coverts diagram to birth-lifetime coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>kx2 numpy array with coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to ZZPers’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Sarah Tymochko
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
