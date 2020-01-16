@@ -10,7 +10,9 @@ Welcome to ZZPers's documentation!
    :maxdepth: 1
    :caption: Contents:
 
-   ./classes
+   ./background
+   ./examples
+   ./modules
 
 Description
 ===========
@@ -20,9 +22,18 @@ This package provides python code to compute zigzag persistence from point cloud
 Requirements
 ============
 
-Please note that this code is still pre-alpha, so many things are not fully up and running yet.
+Must have Dionysis 2 installed. Can install with 
 
-Bugs reports and feature reqests can be posted on the github issues page.
+.. code-block:: bash
+
+	pip install dionysis
+
+
+
+Contact
+========
+
+Sarah Tymochko: `tymochko@egr.msu.edu <mailto:tymochko@egr.msu.edu>`_.
 
 
 
