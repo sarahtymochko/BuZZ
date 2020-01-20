@@ -51,6 +51,11 @@ class PD(object):
         '''
         
         D = np.copy(self.dgm)
+
+        if not self.dgm.size:
+            print('Uh oh.. Diagram ' + str(self.dim) + ' is empty...')
+            print('Quitting...')
+            return
         
         
         # Separate out the infinite classes if they exist
@@ -67,17 +72,17 @@ class PD(object):
         #     fig = plt.figure()
         # ax = fig.gca()
         # Plot the diagonal
-        plt.plot([0,boundary],[0,boundary])
+        plt.plot([0,boundary],[0,boundary],color='gray')
 
         # Plot the diagram points
         if color is None:
-            plt.scatter(D[:,0],D[:,1])
+            plt.scatter(D[:,0],D[:,1], label='Dim '+ str(self.dim))
         else:
-            plt.scatter(D[:,0],D[:,1], c=color)
+            plt.scatter(D[:,0],D[:,1], c=color, label='Dim '+ str(self.dim))
 
         if includesInfPts:
             for i in range(len(Dinf[:,0])):
-                plt.scatter(Dinf[i,0], .98*boundary, marker='s', color='red')
+                plt.scatter(Dinf[i,0], .98*boundary, marker='s',color='r')
 
             plt.axis([-.01*boundary,boundary,-.01*boundary,boundary])
 
