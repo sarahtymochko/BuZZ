@@ -17,14 +17,14 @@ class PD(object):
         self.dgm = np.array(dgm)
         self.dim = dimension
         self.numPts = len(dgm)
-        
+
     def __len__(self):
         '''
         :returns: number of points in the diagram
 
         '''
         return self.numPts
-    
+
     def __str__(self):
         '''
         Nicely prints.
@@ -39,7 +39,7 @@ class PD(object):
             output += str(attrs[key])+ '\n'
         output += '---\n'
         return output
-    
+
     def drawDgm(self,boundary=None,epsilon = .5, color=None):
         '''
         Plots persistence diagram.
@@ -49,15 +49,15 @@ class PD(object):
         :param color: Color for plotting points in diagram.
 
         '''
-        
+
         D = np.copy(self.dgm)
 
         if not self.dgm.size:
             print('Uh oh.. Diagram ' + str(self.dim) + ' is empty...')
             print('Quitting...')
             return
-        
-        
+
+
         # Separate out the infinite classes if they exist
         includesInfPts = np.inf in D
         if includesInfPts:
@@ -88,9 +88,9 @@ class PD(object):
 
         plt.ylabel('Death')
         plt.xlabel('Birth')
-        plt.title('Persistence Diagram\nDimension '+str(self.dim))
-        
-        
+        # plt.title('Persistence Diagram\nDimension '+str(self.dim))
+
+
     def drawDgm_BL(self,boundary=None,epsilon = .5, color=None):
 
         '''
@@ -99,18 +99,18 @@ class PD(object):
         :param boundary: The diagram is drawn on [0,boundary]x[0,boundary].
         :param epsilon: If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.
         :param color: Color for plotting points in diagram.
-        
+
         '''
-        
+
         D = np.copy(self.dgm)
         D[:,1] = D[:,1] - D[:,0]
-        
+
         # Separate out the infinite classes if they exist
         includesInfPts = np.inf in D
         if includesInfPts:
             Dinf = D[np.isinf(D[:,1]),:]
             D = D[np.isfinite(D[:,1]),:]
-            
+
         # Get the max birth/death time if it's not already specified
         if not boundary:
             boundary = np.amax(D)+epsilon
@@ -128,24 +128,24 @@ class PD(object):
 
         plt.ylabel('Lifetime')
         plt.xlabel('Birth')
-        plt.title('Persistence Diagram\nDimension '+str(self.dim))
-        
-    
+        # plt.title('Persistence Diagram\nDimension '+str(self.dim))
+
+
     def removeInfiniteClasses(self):
         '''
         Simply deletes classes that have infinite lifetimes.
         '''
         keepRows = np.isfinite(self.dgm[:,1])
         return self.dgm[keepRows,:]
-    
+
     def maxPers(self):
         '''
         Calculates maximum persistence of the diagram.
-        
+
         '''
-        
+
         Dgm = np.copy(self.dgm)
-        
+
         try:
             lifetimes = Dgm[:,1] - Dgm[:,0]
             m = max(lifetimes)
@@ -157,7 +157,7 @@ class PD(object):
             return m
         except:
             return 0
-        
+
     def toBirthLifetime(self):
         '''
         Coverts diagram to birth-lifetime coordinates.
@@ -165,8 +165,8 @@ class PD(object):
         :returns: kx2 numpy array with coordinates
 
         '''
-        
+
         Dgm = np.copy(self.dgm)
         Dgm[:,1] = Dgm[:,1] - Dgm[:,0]
-        
+
         return Dgm
