@@ -82,7 +82,10 @@ class PD(object):
 
         if includesInfPts:
             for i in range(len(Dinf[:,0])):
-                plt.scatter(Dinf[i,0], .98*boundary, marker='s',color='r')
+                if color is None:
+                    plt.scatter(Dinf[i,0], .98*boundary, marker='s', color='red')
+                else:
+                    plt.scatter(Dinf[i,0], .98*boundary, marker='s', color=color)
 
             plt.axis([-.01*boundary,boundary,-.01*boundary,boundary])
 
@@ -123,8 +126,10 @@ class PD(object):
 
         if includesInfPts:
             for i in range(len(Dinf[:,0])):
-
-                plt.scatter(Dinf[i,0], .98*boundary, marker='s', color='red')
+                if color is None:
+                    plt.scatter(Dinf[i,0], .98*boundary, marker='s', color='red')
+                else:
+                    plt.scatter(Dinf[i,0], .98*boundary, marker='s', color=color)
 
         plt.ylabel('Lifetime')
         plt.xlabel('Birth')
