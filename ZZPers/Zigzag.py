@@ -8,11 +8,11 @@ import time
 from ripser import ripser
 
 class PtClouds(object):
-    def __init__(self, ptclouds,verbose=False): 
+    def __init__(self, ptclouds,verbose=False):
         '''
         Initialize class to hold collection of pointclouds
 
-        :param ptclouds: List of point clouds 
+        :param ptclouds: List of point clouds
         :param verbose: If true, prints updates when running code
 
         '''
@@ -24,7 +24,7 @@ class PtClouds(object):
             self.ptclouds['PtCloud'] = ptclouds
 
         self.verbose = verbose
-            
+
     def __str__(self):
         '''
         Nicely prints.
@@ -38,9 +38,9 @@ class PtClouds(object):
             output += str(attrs[key])+ '\n'
         output += '---\n'
         return output
-    
 
-    def run_Zigzag_from_PC(self, delta, k=2, cplx_type = 'Rips'): 
+
+    def run_Zigzag_from_PC(self, delta, k=2, cplx_type = 'Rips'):
         '''
         Runs zigzag persistence on collections of point clouds, taking unions between each adjacent pair of point clouds.
         Adds attributes to class `zz`, `zz_dgms`, `zz_cells` which are the outputs of dionysus' zigzag persistence function.
@@ -48,8 +48,11 @@ class PtClouds(object):
         :param delta: Parameter for Rips complex on each point cloud. Can be a single number or a list with one delta value per point cloud.
         :param k: Maximum dimension simplex desired
         :param cplx_type: Type of complex you want created for each point cloud and each point cloud union. Only option currently is 'Rips'.
-        
+
         '''
+
+        if self.verbose:
+            print('Starting rips complex computations...')
 
         st_getallcplx = time.time()
         # if cplx_type == 'Flag':
@@ -57,31 +60,31 @@ class PtClouds(object):
         # else:
             # self.get_All_Cplx_RIPS(delta,k)
         end_getallcplx = time.time()
-        
+
         if self.verbose:
-            print('Time to build all complexes: ', str(end_getallcplx-st_getallcplx))
-        
+            print('\tTime to build all complexes: ', str(end_getallcplx-st_getallcplx))
+            print('\nStarting filtration and times computation...')
+
         st_getfilt = time.time()
         self.all_Cplx_to_Filtration()
         end_getfilt = time.time()
-        
+
         if self.verbose:
-            print('Time to build filtration: ', str(end_getfilt-st_getfilt))
-        
+            print('\tTime to build filtration: ', str(end_getfilt-st_getfilt))
+            print('\nStarting zigzag calculation...')
+
         st_zz = time.time()
         zz, dgms, cells = dio.zigzag_homology_persistence(self.filtration,self.times_list)
         end_zz = time.time()
-        
+
         if self.verbose:
-            print('Time to compute zigzag: ', str(end_zz-st_zz))
-                  
-        if self.verbose:
+            print('\tTime to compute zigzag: ', str(end_zz-st_zz))
             print('\nTotal Time: ', str(end_zz - st_getallcplx), '\n')
-            
+
         self.zz = zz
         self.zz_dgms = to_PD_Class(dgms)
         self.zz_cells = cells
-    
+
 
     def get_All_Cplx(self,delta,k=2,cplx_type='Rips'):
         '''
@@ -92,68 +95,97 @@ class PtClouds(object):
         :param cplx_type: Type of complex you want created for each point cloud and each point cloud union. Only option currently is 'Rips'.
 
         '''
-        
+
         AllPtClds = list(self.ptclouds['PtCloud'])
-        
+
         if type(delta) is not list:
             delta = [delta]
         if len(delta) == len(AllPtClds):
             delta = delta
         else:
             delta = [delta[0]] * len(AllPtClds)
-        
+
         self.delta = delta
         self.k = k
-            
+
         # Initialize empty dataframe to store all complexes
         allCplx = pd.DataFrame(columns=['Time','Cplx','Label'])
 
-        if cplx_type == 'Flag':
-            # Initialize first complex
-            D = distance_matrix(AllPtClds[0],AllPtClds[0])
-            C = from_DistMat_to_Cpx(D,delta = delta[0])
+        # Initially ignore first point cloud, we'll come back to it later
+        allCplx.loc[0] = [0, [], 'PC']
 
-        else:
-            D = dio.fill_rips(AllPtClds[0], self.k, delta[0])
-            C = []
-            for s in D:
-                s.data = 0
-                C.append(s)
-
-        allCplx.loc[0] = [0, C, 'PC']
-
+        # Index of the complex in the dataframe
         dfind = 1
+
+        # First index of the vertex in the complex to avoid renaming
         vertind = 0
-        for i in range(0,len(AllPtClds)-1):  
-            if cplx_type == 'Flag':  
-                D_union = distance_matrix(np.concatenate([AllPtClds[i],AllPtClds[i+1]]), np.concatenate([AllPtClds[i],AllPtClds[i+1]]) )
-                C_union = from_DistMat_to_Cpx(D_union, start_ind = vertind, delta = max(delta[i], delta[i+1]))
-            else:
-                D_union = dio.fill_rips(np.concatenate([AllPtClds[i],AllPtClds[i+1]]), self.k, max(delta[i], delta[i+1]))
-                C_union = fix_dio_vert_nums(D_union,vertind)
+
+        lp_times = []
+        # Loop over all point clouds
+        for i in range(0,len(AllPtClds)-1):
+            lp_st = time.time()
+            # if cplx_type == 'Flag':
+            #     D_union = distance_matrix(np.concatenate([AllPtClds[i],AllPtClds[i+1]]), np.concatenate([AllPtClds[i],AllPtClds[i+1]]) )
+            #     C_union = from_DistMat_to_Cpx(D_union, start_ind = vertind, delta = max(delta[i], delta[i+1]))
+            # else:
+            D_union = dio.fill_rips(np.concatenate([AllPtClds[i],AllPtClds[i+1]]), self.k, max(delta[i], delta[i+1]))
+            C_union = fix_dio_vert_nums(D_union,vertind,dfind)
 
             allCplx.loc[dfind] = [dfind,C_union,'Union']
 
             dfind = dfind + 1
             vertind = vertind + len(AllPtClds[i])
 
-            if cplx_type == 'Flag':
-                D_next = distance_matrix(AllPtClds[i+1],AllPtClds[i+1])
-                C_next = from_DistMat_to_Cpx(D_next, start_ind = vertind, delta = delta)
-            else:
-                D_next = dio.fill_rips(AllPtClds[i+1], self.k, delta[i+1])
-                C_next = fix_dio_vert_nums(D_next,vertind)
+            # if cplx_type == 'Flag':
+            #     D_next = distance_matrix(AllPtClds[i+1],AllPtClds[i+1])
+            #     C_next = from_DistMat_to_Cpx(D_next, start_ind = vertind, delta = delta)
+            # else:
+            D_next = dio.fill_rips(AllPtClds[i+1], self.k, delta[i+1])
+            C_next = fix_dio_vert_nums(D_next,vertind, dfind-1)
 
             allCplx.loc[dfind] = [dfind,C_next,'PC']
 
             dfind = dfind + 1
 
-            D = D_next
-            C = C_next
+            # D = D_next
+            # C = C_next
+
+            lp_end = time.time()
+            lp_times.append(lp_end-lp_st)
+
+        if self.verbose:
+            print('\tStats on loop in get_All_Cplx:')
+            print('\t\t Mean: ', np.mean(lp_times))
+            print('\t\t Min: ', min(lp_times))
+            print('\t\t Max: ', max(lp_times))
+
+        fix_st = time.time()
+        # Now come back and handle the first point cloud
+        D = dio.fill_rips(AllPtClds[0], self.k, delta[0])
+        C = []
+        for s in D:
+            s.data = 0
+            C.append(s)
+
+        allCplx.loc[0] = [0, C, 'PC']
+
+        # Fix the union of the first and second point cloud
+        C = []
+        for s in allCplx.loc[1,'Cplx']:
+            if s in allCplx.loc[0,'Cplx']:
+                s.data = 0
+                C.append(s)
+            else:
+                C.append(s)
+
+        allCplx.loc[1] = [1, C, 'Union']
+
+        if self.verbose:
+            print('\t\t Remainder of fcn: ', time.time()-fix_st)
 
         self.all_Cplx = allCplx
-    
-    
+
+
     def all_Cplx_to_Filtration(self):
         '''
         Helper function for `run_Zigzag_from_PC` to get create the filtration and times to pass into dionysus zigzag persistence function.
@@ -161,45 +193,85 @@ class PtClouds(object):
         '''
 
         all_Cplx = self.all_Cplx
-    
-        # Get filtration consisting of all simplices from all complexes
-        f = dio.Filtration(dio.closure(all_Cplx['Cplx'].sum(),2))
+
+        tempf = dio.Filtration(all_Cplx['Cplx'].sum())
+
+        if self.verbose:
+            print('\tNum Simplices: ', len(tempf))
+
 
         # Initialize empty dataframe to store all complexes
-        times_df = pd.DataFrame(columns=['Simp','B,D'])
+        times_df = pd.DataFrame(columns=['Simp','B,D'], index=np.arange(0,len(tempf)))
 
+        # Loop over all simplices in the filtration
+        # Initialize index for times dataframe
         timesind = 0
-        for simp in f:
-            times_df.loc[timesind,'Simp'] = simp
 
-            ins = []
-            outs = []
-            found_birth = False
-            found_death = False
-            d = np.inf
-            for i in all_Cplx.index:
-                if simp in all_Cplx.loc[i,'Cplx'] and not found_birth:
-                    b = all_Cplx.loc[i,'Time']
-                    found_birth = True
-                if simp not in all_Cplx.loc[i,'Cplx'] and found_birth:
-                    d = all_Cplx.loc[i,'Time']
-                    found_death = True
+        lp_times = []
+        for simp in tempf:
+            lp_st = time.time()
+            times_df.loc[timesind,'Simp'] = str(simp).split(' ')[0]
 
-                if found_birth and found_death:
-                    break
 
-            if np.isfinite(d):
-                times_df.loc[timesind,'B,D'] = [b ,d]
+            # Birth precomputed when calculating rips complexes
+            b = int(simp.data)
+
+            # If it's a vertex...
+            if simp.dimension() == 0:
+                if b == 0: # if vert is in first point cloud
+                    times_df.loc[timesind,'B,D'] = [b,b+2]
+                elif b%2 == 1: # if birth time is odd
+                    if b+3 > len(all_Cplx['Cplx']):
+                        times_df.loc[timesind,'B,D'] = [b,np.inf]
+                    else:
+                        times_df.loc[timesind,'B,D'] = [b,b+3]
+
+                else: # if birth time is even
+                    print('Something is wrong.. birth times of verts shouldnt be even...')
+
+            # If it's a higher dimensional simplex...
             else:
-                times_df.loc[timesind,'B,D'] = [b]
+                # If it is born in the first complex, death=birth+2
+                if b == 0:
+                    times_df.loc[timesind,'B,D'] = [b,b+2]
 
+                else:
+                    # Get a list of birth times of all vertices in the simplex
+                    births = []
+                    for v in simp:
+                        births.append(tempf[tempf.index(dio.Simplex([v]))].data)
+
+                    # If all vertices in the simplex are born at the same time, death = birth+3
+                    if len(set(births)) <= 1:
+                        if b+3 > len(all_Cplx['Cplx']):
+                            times_df.loc[timesind,'B,D'] = [b,np.inf]
+                        else:
+                            times_df.loc[timesind,'B,D'] = [b,b+3]
+
+                    # If vertices in the simplex have different birth times, death=birth+1
+                    else:
+                        times_df.loc[timesind,'B,D'] = [b,b+1]
+
+
+            # Increment index
             timesind = timesind+1
 
-        self.filtration = f
+            lp_end = time.time()
+            lp_times.append(lp_end-lp_st)
+
+        if self.verbose:
+            print('\tStats on loop in all_Cplx_to_Filtration')
+            print('\t\t Mean: ', np.mean(lp_times))
+            print('\t\t Min: ', min(lp_times))
+            print('\t\t Max: ', max(lp_times))
+
+
+        # Add filtration and times_list attributes
+        self.filtration = tempf
 #         self.times_df = times_df
         self.times_list = list(times_df['B,D'])
-    
-    
+
+
     def run_Ripser(self):
         '''
         Function to run Ripser on all point clouds in the list and save them in the 'Dgms' column of the `ptclouds` attribute as a column of the DataFrame.
@@ -210,16 +282,16 @@ class PtClouds(object):
         for PC in list(self.ptclouds['PtCloud']):
             diagrams = ripser(PC)['dgms']
             dgms_dict = {i: diagrams[i] for i in range(len(diagrams))}
-                
+
             dgms_list.append(dgms_dict)
-        
+
         end_ripser = time.time()
-        
+
         if self.verbose:
             print('Time to compute persistence: ', str(end_ripser-st_ripser))
         self.ptclouds['Dgms'] = dgms_list
-        
-        
+
+
 
 def to_PD_Class(dio_dgms):
     '''
@@ -248,7 +320,7 @@ def from_DistMat_to_Cpx(D,start_ind=0, delta = .1):
     '''
 
     numVerts = D.shape[0]
-    listAllVerts = [dio.Simplex([k+start_ind]) for k in range(numVerts)] 
+    listAllVerts = [dio.Simplex([k+start_ind]) for k in range(numVerts)]
 
     PossibleEdges = (D<= delta) - np.eye(D.shape[0])
     listAllEdges = np.array(np.where(PossibleEdges)).T
@@ -256,7 +328,7 @@ def from_DistMat_to_Cpx(D,start_ind=0, delta = .1):
     Cpx = dio.closure(listAllVerts + listAllEdges ,2)
     return Cpx
 
-def fix_dio_vert_nums(D, vertind):
+def fix_dio_vert_nums(D, vertind, data=None):
     '''
     Helper function for `get_All_Cplx` to adjust indexing of vertices in Dionysus from `fill_rips` function.
 
@@ -265,10 +337,15 @@ def fix_dio_vert_nums(D, vertind):
     '''
     C = []
     for s in D:
-        s.data = 0
+        # s.data = data
         vlist = []
         for v in s:
             vlist.append(v+vertind)
         s = dio.Simplex(vlist)
+        if data:
+            s.data = data
+        else:
+            s.data = 0
+        # print(s)
         C.append(s)
-    return C 
+    return C
