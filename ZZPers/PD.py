@@ -6,12 +6,21 @@ import matplotlib.pyplot as plt
 from scipy.spatial import distance_matrix
 
 class PD(object):
+    '''
+    Class to hold persistence diagram.
+
+    Parameters
+    ----------
+    dgm: np.array
+        A kx2 numpy array containing birth death coordinates of the diagram
+    dim: int
+        Dimension of the diagram
+
+
+    '''
     def __init__(self,dgm,dimension):
         '''
-        Initialize self.
-
-        :param dgm: kx2 numpy array containing birth death coordinates of the diagram
-        :param dim: dimension of the diagram
+        Initialize.
 
         '''
         self.dgm = np.array(dgm)
@@ -20,7 +29,10 @@ class PD(object):
 
     def __len__(self):
         '''
-        :returns: number of points in the diagram
+        Returns
+        --------
+
+        Number of points in the diagram
 
         '''
         return self.numPts
@@ -44,9 +56,14 @@ class PD(object):
         '''
         Plots persistence diagram.
 
-        :param boundary: The diagram is drawn on [0,boundary]x[0,boundary].
-        :param epsilon: If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.
-        :param color: Color for plotting points in diagram.
+        Parameters
+        ----------
+        boundary: float
+            The diagram is drawn on [0,boundary]x[0,boundary].
+        epsilon: float
+            If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.
+        color:
+            Color for plotting points in diagram.
 
         '''
 
@@ -99,9 +116,14 @@ class PD(object):
         '''
         Plots persistence diagram in birth-lifetime coordinates.
 
-        :param boundary: The diagram is drawn on [0,boundary]x[0,boundary].
-        :param epsilon: If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.
-        :param color: Color for plotting points in diagram.
+        Parameters
+        ----------
+        boundary: float
+            The diagram is drawn on [0,boundary]x[0,boundary].
+        epsilon: float
+            If boundary not given, then it is determined to be the max death time from the input diagram plus epsilon.
+        color:
+            Color for plotting points in diagram.
 
         '''
 
@@ -139,6 +161,7 @@ class PD(object):
     def removeInfiniteClasses(self):
         '''
         Simply deletes classes that have infinite lifetimes.
+
         '''
         keepRows = np.isfinite(self.dgm[:,1])
         return self.dgm[keepRows,:]
@@ -166,8 +189,6 @@ class PD(object):
     def toBirthLifetime(self):
         '''
         Coverts diagram to birth-lifetime coordinates.
-
-        :returns: kx2 numpy array with coordinates
 
         '''
 
