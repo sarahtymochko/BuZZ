@@ -17,7 +17,21 @@ Welcome to ZZPers's documentation!
 Description
 ===========
 
-This package provides python code to compute zigzag persistence from point cloud data by employing code from Dionysus 2.
+This package provides python code to compute zigzag and regular persistence from a collection of point clouds.
+Regular persistence is calculated using ripser_ from Scikit-TDA_, while zigzag persistence is calculated using code from Dionysus2_.
+
+
+See :ref:`Background` for a brief introduction and the specific zigzag diagram used in this code.
+See :ref:`Examples` for an examples of how to use this code.
+
+.. _Ripser: http://ripser.scikit-tda.org/reference/stubs/ripser.ripser.html#ripser.ripser
+.. _Scikit-TDA: https://scikit-tda.org/
+.. _Dionysus2: https://mrzv.org/software/dionysus2/
+
+Installation
+============
+
+Hopefully it will use pip :)
 
 Requirements
 ============
@@ -37,8 +51,8 @@ Sarah Tymochko: `tymochko@egr.msu.edu <mailto:tymochko@egr.msu.edu>`_.
 
 
 
-.. Indices and tables
-.. ==================
+Index and Search
+==================
 
-.. * :ref:`genindex`
-.. * :ref:`search`
+* :ref:`genindex`
+* :ref:`search`
