@@ -1,7 +1,0 @@
-Background
-==========
-
-.. toctree::
-   :caption: Background:
-
-
