@@ -12,17 +12,17 @@ Welcome to ZZPers's documentation!
 
    ./background
    ./examples
-   ./modules
+   ./API
 
 Description
 ===========
 
-This package provides python code to compute zigzag persistence from point cloud data by employing code from Dionysus 2. 
+This package provides python code to compute zigzag persistence from point cloud data by employing code from Dionysus 2.
 
 Requirements
 ============
 
-Must have Dionysis 2 installed. Can install with 
+Must have Dionysis 2 installed. Can install with
 
 .. code-block:: bash
 

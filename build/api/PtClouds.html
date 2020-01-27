@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PtClouds module &mdash; ZZPers 2020 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ZZPers
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ZZPers</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>PtClouds module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/PtClouds.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-PtClouds">
+<span id="ptclouds-module"></span><h1>PtClouds module<a class="headerlink" href="#module-PtClouds" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="PtClouds.PtClouds">
+<em class="property">class </em><code class="sig-prename descclassname">PtClouds.</code><code class="sig-name descname">PtClouds</code><span class="sig-paren">(</span><em class="sig-param">ptclouds</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.PtClouds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="PtClouds.PtClouds.run_Ripser">
+<code class="sig-name descname">run_Ripser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.PtClouds.run_Ripser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to run Ripser on all point clouds in the list and save them in the ‘Dgms’ column of the <cite>ptclouds</cite> attribute as a column of the DataFrame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PtClouds.PtClouds.run_Zigzag_from_PC">
+<code class="sig-name descname">run_Zigzag_from_PC</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">k=2</em>, <em class="sig-param">cplx_type='Rips'</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.PtClouds.run_Zigzag_from_PC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs zigzag persistence on collections of point clouds, taking unions between each adjacent pair of point clouds.
+Adds attributes to class <cite>zz</cite>, <cite>zz_dgms</cite>, <cite>zz_cells</cite> which are the outputs of dionysus’ zigzag persistence function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delta</strong> – Parameter for Rips complex on each point cloud. Can be a single number or a list with one delta value per point cloud.</p></li>
+<li><p><strong>k</strong> – Maximum dimension simplex desired</p></li>
+<li><p><strong>cplx_type</strong> – Type of complex you want created for each point cloud and each point cloud union. Only option currently is ‘Rips’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="PtClouds.fix_dio_vert_nums">
+<code class="sig-prename descclassname">PtClouds.</code><code class="sig-name descname">fix_dio_vert_nums</code><span class="sig-paren">(</span><em class="sig-param">D</em>, <em class="sig-param">vertind</em>, <em class="sig-param">data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.fix_dio_vert_nums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function for <cite>get_All_Cplx</cite> to adjust indexing of vertices in Dionysus from <cite>fill_rips</cite> function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vertind</strong> – starting index for vertices</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="PtClouds.from_DistMat_to_Cpx">
+<code class="sig-prename descclassname">PtClouds.</code><code class="sig-name descname">from_DistMat_to_Cpx</code><span class="sig-paren">(</span><em class="sig-param">D</em>, <em class="sig-param">start_ind=0</em>, <em class="sig-param">delta=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.from_DistMat_to_Cpx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using a distance matrix, compute the flag complex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>D</strong> – pairwise distance matrix</p></li>
+<li><p><strong>start_ind</strong> – starting index for vertices</p></li>
+<li><p><strong>delta</strong> – Parameter for Flag or Rips complex.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="PtClouds.getVerts">
+<code class="sig-prename descclassname">PtClouds.</code><code class="sig-name descname">getVerts</code><span class="sig-paren">(</span><em class="sig-param">simp</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.getVerts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="PtClouds.setup_Zigzag">
+<code class="sig-prename descclassname">PtClouds.</code><code class="sig-name descname">setup_Zigzag</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">r</em>, <em class="sig-param">k=2</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.setup_Zigzag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up inputs needed for Dionysus’ zigzag persistence function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lst</strong> (<em>list</em>) – List of point clouds</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Radius for rips complex</p></li>
+<li><p><strong>k</strong> (<em>int</em><em>, </em><em>optional</em>) – Max dimension for rips complex (default is 2)</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, prints updates when running code</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Inputs for Dionysus’ zigzag persistence function, <code class="docutils literal notranslate"><span class="pre">filtration</span></code> and <code class="docutils literal notranslate"><span class="pre">times</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="PtClouds.to_PD_Class">
+<code class="sig-prename descclassname">PtClouds.</code><code class="sig-name descname">to_PD_Class</code><span class="sig-paren">(</span><em class="sig-param">dio_dgms</em><span class="sig-paren">)</span><a class="headerlink" href="#PtClouds.to_PD_Class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to convert Dionysus diagram class into my PD class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dio_dgms</strong> – Persistence diagrams from Dionysus</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Sarah Tymochko
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
