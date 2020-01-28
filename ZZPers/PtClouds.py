@@ -61,8 +61,8 @@ class PtClouds(object):
         Parameters
         ----------
 
-        delta: float or list of floats
-            Parameter for Rips complex on each point cloud. Can be a single number or a list with one delta value per point cloud.
+        r: float or list of floats
+            Parameter for Rips complex on each point cloud. Can be a single number or a list with one value per point cloud.
 
         k: int, optional
             Maximum dimension simplex desired (default is 2)
