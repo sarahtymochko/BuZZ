@@ -7,7 +7,7 @@ from ZZPers.ZZPers.PD import PD
 import time
 from ripser import ripser
 
-
+## Using a fixed radius is working... Need to add changing radius 
 
 class PtClouds(object):
     '''
