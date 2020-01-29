@@ -72,12 +72,12 @@ class PtClouds(object):
         self.r = r
         self.k = k
 
-
+        # Set up inputs for dionysus zigzag persistence
         ft_st = time.time()
         if type(r) == float or type(r) == int:
-            filtration, times = self.setup_Zigzag(r = self.r, k = self.k, verbose = self.verbose)
+            filtration, times = self.setup_Zigzag_fixed(r = self.r, k = self.k, verbose = self.verbose)
         else:
-            filtration, times = self.setup_Zigzag_LIST(r = self.r, k = self.k, verbose = self.verbose)
+            filtration, times = self.setup_Zigzag_changing(r = self.r, k = self.k, verbose = self.verbose)
         ft_end = time.time()
 
         self.filtration = filtration
@@ -85,8 +85,8 @@ class PtClouds(object):
 
         if self.verbose:
             print('Time to build filtration, times: ', str(ft_end-ft_st))
-        ###########################
 
+        # Run zigzag presistence using dionysus
         zz_st = time.time()
         zz, dgms, cells = dio.zigzag_homology_persistence(self.filtration,self.times_list)
         zz_end = time.time()
@@ -131,9 +131,10 @@ class PtClouds(object):
             print('Time to compute persistence: ', str(end_ripser-st_ripser))
         self.ptclouds['Dgms'] = dgms_list
 
-    def setup_Zigzag(self, r, k=2, verbose=False):
+    def setup_Zigzag_fixed(self, r, k=2, verbose=False):
         '''
         Helper function for ``run_Zigzag`` that sets up inputs needed for Dionysus' zigzag persistence function.
+        This only works for a fixed radius r.
 
         Parameters
         ----------
@@ -266,14 +267,15 @@ class PtClouds(object):
         return filtration, times_list
 
 
-    def setup_Zigzag_LIST(self, r, k=2, verbose=False):
+    def setup_Zigzag_changing(self, r, k=2, verbose=False):
         '''
         Helper function for ``run_Zigzag`` that sets up inputs needed for Dionysus' zigzag persistence function.
+        This one allows r to be a list of radii, rather than one fixed value
 
         Parameters
         ----------
 
-        r: float
+        r: list
             List of radii for rips complex of each X_i
 
         k: int, optional
@@ -294,6 +296,17 @@ class PtClouds(object):
 
         lst = list(self.ptclouds['PtCloud'])
 
+        # If you haven't input enough r values, just append extra of the last
+        # list entry to make it the right number
+        if len(r) < len(lst):
+            r = r + ([r[-1]]* (len(lst)- len(r)))
+            self.r = r
+        elif len(r) > len(lst):
+            if verbose:
+                print('Warning: too many radii given, only using first ', len(lst))
+            r = r[:len(lst)]
+            self.r = r
+
         # simps_df = pd.DataFrame(columns = ['Simp','B,D'])
         simps_list = []
         times_list = []
@@ -302,6 +315,7 @@ class PtClouds(object):
         vertind = 0
 
         init_st = time.time()
+
         # Initialize A with R(X_0)
         rips = dio.fill_rips(lst[0], k=2, r=r[0])
         rips.sort()
@@ -309,7 +323,6 @@ class PtClouds(object):
 
         # Add all simps to the list with birth,death=[0,1]
         for s in rips_set:
-            # s.data = 0
             simps_list.append(s)
             times_list.append([0,1])
 
@@ -392,14 +405,13 @@ class PtClouds(object):
 
                     # If r[i-1] <= r[i], anything with verts in B should also be in B
                     if r[i-1] <= r[i]:
-                    # simp.data = 0
                         simps_list.append(simp)
                         times_list.append([i-0.5,i+1])
                         B.add(simp)
 
                     # If r[i-1] > r[i], we need to check if it should go in M or B
                     else:
-                        # If simplex's birth timee is greater than the radius, it goes in M
+                        # If simplex's birth time is greater than the radius, it goes in M
                         if simp.data > r[i]:
                             simps_list.append(simp)
                             times_list.append([i-0.5,i])
@@ -414,12 +426,28 @@ class PtClouds(object):
                 # If it has some verts in A and some in B, it only exists in the union
                 # Add to list and set birth,death appropriately
                 else:
+                    if simp not in simps_list:
+                        simps_list.append(simp)
+                        times_list.append([i-0.5,i])
+                        M.add(simp)
+                    else:
+                        # Find where it is in the list
+                        simp_ind = simps_list.index(simp)
 
-                    # simp.data = 0
-                    simps_list.append(simp)
-                    times_list.append([i-0.5,i])
-                    M.add(simp)
+                        # Remove the simplex and its birth,death time from each list
+                        simps_list.pop(simp_ind)
+                        curr_times = times_list.pop(simp_ind)
 
+                        # Readd to lists and M
+                        # Concatenate birth,death times we've added before with new ones
+                        simps_list.append(simp)
+                        times_list.append(curr_times + [i-0.5,i])
+                        M.add(simp)
+
+
+            # print('A', A)
+            # print('B', B)
+            # print('M', M, '\n')
 
             # Reinitialize for next iteration
             verts = verts_next
@@ -429,13 +457,8 @@ class PtClouds(object):
         if verbose:
             print(f'Loop done in {loop_end-loop_st} seconds...')
 
-
-        f_st = time.time()
+        # Put list of simplices into Filtration format
         filtration = dio.Filtration(simps_list)
-        f_end = time.time()
-
-        if verbose:
-            print(f'Calculated filtration in {f_end-f_st} seconds...\n')
 
         return filtration, times_list
 
@@ -465,7 +488,7 @@ def to_PD_Class(dio_dgms):
     return all_dgms
 
 
-def fix_dio_vert_nums(Cplx, vertind, data=None):
+def fix_dio_vert_nums(Cplx, vertind):
     '''
     Helper function to adjust indexing of vertices in Dionysus from ``fill_rips`` function.
 
@@ -487,11 +510,7 @@ def fix_dio_vert_nums(Cplx, vertind, data=None):
         for v in s:
             vlist.append(v+vertind)
         s = dio.Simplex(vlist,s.data)
-        # if data:
-        #     s.data = data
-        # else:
-        #     s.data = 0
-        # print(s)
+
         New_Cplx.append(s)
     return New_Cplx
 
