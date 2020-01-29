@@ -161,8 +161,7 @@ class PtClouds(object):
         lst = list(self.ptclouds['PtCloud'])
 
         # simps_df = pd.DataFrame(columns = ['Simp','B,D'])
-        simps_list = []
-        times_list = []
+        simps_list = []; times_list = []
 
         # Vertex counter
         vertind = 0
@@ -217,7 +216,7 @@ class PtClouds(object):
                 # Get list of vertices of simp
                 bdy = getVerts(simp)
 
-                # If it has no boundary and its in B, its a vertex in B and will be handled later
+                # If it has no boundary and its in B, its a vertex in B and has been handled
                 if not bdy:
                     continue
 
@@ -304,8 +303,7 @@ class PtClouds(object):
             self.r = r
 
         # simps_df = pd.DataFrame(columns = ['Simp','B,D'])
-        simps_list = []
-        times_list = []
+        simps_list = []; times_list = []
 
         # Vertex counter
         vertind = 0
@@ -318,18 +316,16 @@ class PtClouds(object):
         rips_set = set(rips)
 
         # Initialize A with set of simplices with verts in X_0
+        # In the loop, this will store simplices with verts in X_{i-1}
         A = rips_set
 
         # Add all simps to the list with birth,death=[0,1]
-        # simps_list =  simps_list + [s for s in A]
-        # times_list = times_list + [[0,1] for j in range(len(A))]
-        for s in rips_set:
-            simps_list.append(s)
-            times_list.append([0,1])
+        simps_list =  simps_list + [s for s in A]
+        times_list = times_list + [[0,1] for j in range(len(A))]
 
         # Initialize with vertices for X_0
+        # In the loop, this will store vertices in X_{i-1}
         verts = set([dio.Simplex([j+vertind],0) for j,pc in enumerate(lst[0])])
-
 
         init_end = time.time()
         if verbose:
@@ -350,13 +346,14 @@ class PtClouds(object):
             # Increment vertex counter
             vertind = vertind+len(verts)
 
-            # Set of vertices in R(X_i)
+            # Set of vertices in X_{i}
             verts_next = set([dio.Simplex([j+vertind],0) for j,pc in enumerate(lst[i])])
 
             # Set of simplices with verts in X_{i}
             B = set(verts_next.intersection(rips_set))
 
             # Set of simplices with verts in X_{i-1} AND X_{i}
+            # And simplicies in X_{i-1} \cup X_{i} that are not in X_{i-1} or X_i
             M = set()
 
             # Loop over vertices in R(X_{i-1} \cup R_i)
@@ -365,88 +362,60 @@ class PtClouds(object):
                 # Get list of vertices of simp
                 bdy = getVerts(simp) #set([s for s in simp.boundary()])
 
-                # If it has no boundary and its in B, its a vertex we haven't seen yet
-                # So add it to the list with appropriate birth,death
+                # If it has no boundary and its in B, its a vertex in B and has been handled
                 if not bdy:
-                    if simp in B:
-                        simps_list.append(simp)
-                        times_list.append([i-0.5,i+1])
                     continue
 
                 # If all of its verts are in A, it's been handled in the initialization or the previous iteration
                 if bdy.intersection(A) == bdy:
                     if r[i-1] < r[i]:
                         if simp.data > r[i-1]:
-                            # If we haven't seen it before, add it to the list with appropriate birth,death times
+                            # If we haven't seen it before, add it to M
                             if simp not in simps_list:
-                                simps_list.append(simp)
-                                times_list.append([i-0.5,i])
                                 M.add(simp)
+
                             # If we've already added it to the list...
                             else:
-                                # Find where it is in the list
-                                simp_ind = simps_list.index(simp)
-
-                                # Remove the simplex and its birth,death time from each list
-                                simps_list.pop(simp_ind)
-                                curr_times = times_list.pop(simp_ind)
-
-                                # Readd to lists and M
-                                # Concatenate birth,death times we've added before with new ones
-                                simps_list.append(simp)
-                                times_list.append(curr_times + [i-0.5,i])
-                                M.add(simp)
+                                # Edit the lists to include new birth,death times
+                                simps_list, times_list = edit_Simp_Times(simp,[i-0.5,i],simps_list,times_list)
 
 
-                # If all of its verts are in B, it exists in B and in the following union
-                # Add it to the list with appropriate birth,death
+                # If all of its verts are in B...
                 elif bdy.intersection(B) == bdy:
 
                     # If r[i-1] <= r[i], anything with verts in B should also be in B
                     if r[i-1] <= r[i]:
-                        simps_list.append(simp)
-                        times_list.append([i-0.5,i+1])
                         B.add(simp)
 
                     # If r[i-1] > r[i], we need to check if it should go in M or B
                     else:
                         # If simplex's birth time is greater than the radius, it goes in M
                         if simp.data > r[i]:
-                            simps_list.append(simp)
-                            times_list.append([i-0.5,i])
                             M.add(simp)
 
                         # If it's <= then it goes in B
                         else:
-                            simps_list.append(simp)
-                            times_list.append([i-0.5,i+1])
                             B.add(simp)
 
                 # If it has some verts in A and some in B, it only exists in the union
                 else:
+                    # If we haven't seen it before, add it to M
                     if simp not in simps_list:
-                        simps_list.append(simp)
-                        times_list.append([i-0.5,i])
                         M.add(simp)
+
+                    # If we've already added it to the list...
                     else:
-                        # Find where it is in the list
-                        simp_ind = simps_list.index(simp)
-
-                        # Remove the simplex and its birth,death time from each list
-                        simps_list.pop(simp_ind)
-                        curr_times = times_list.pop(simp_ind)
-
-                        # Readd to lists and M
-                        # Concatenate birth,death times we've added before with new ones
-                        simps_list.append(simp)
-                        times_list.append(curr_times + [i-0.5,i])
-                        M.add(simp)
-
-            # # Add simps and times that are in B
-            # simps_list = simps_list + [simp for simp in B]
-            # times_list = times_list + [[i-0.5,i] for j in range(len(B))]
+                        # Edit the lists to include new birth,death times
+                        simps_list, times_list = edit_Simp_Times(simp,[i-0.5,i],simps_list,times_list)
 
 
+            # Add simps and times that are in B
+            simps_list = simps_list + [simp for simp in B]
+            times_list = times_list + [[i-0.5,i+1] for j in range(len(B))]
+
+            # Add simps and times that are in M
+            simps_list = simps_list + [simp for simp in M]
+            times_list = times_list + [[i-0.5,i] for j in range(len(M))]
 
             # print('A', A)
             # print('B', B)
@@ -465,6 +434,21 @@ class PtClouds(object):
 
         return filtration, times_list
 
+
+def edit_Simp_Times(simp,new_bd_times,simps_list,times_list):
+
+    # Find where it is in the list
+    simp_ind = simps_list.index(simp)
+
+    # Remove the simplex and its birth,death time from each list
+    simps_list.pop(simp_ind)
+    curr_times = times_list.pop(simp_ind)
+
+    # Add to lists and concatenate birth,death times we've added before with new ones
+    simps_list.append(simp)
+    times_list.append(curr_times + new_bd_times)
+
+    return simps_list, times_list
 
 def to_PD_Class(dio_dgms):
     '''
