@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Background &mdash; ZZPers 2020 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Welcome to ZZPers’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ZZPers
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Background</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ZZPers</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Background</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/background.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="background">
+<span id="id1"></span><h1>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>Topological data analysis (TDA) is a relatively new field that has shown significant promise in theory and in applications.
+One of the most popular tools in TDA is persistent homology.
+This tool allows you to track the homology of a filtration, nested set of simplicial complexes,</p>
+<div class="math notranslate nohighlight">
+\[X_0 \hookrightarrow X_1 \hookrightarrow \cdots \hookrightarrow X_n.\]</div>
+<p>Applying homology, we get a diagram of vector spaces and linear maps,</p>
+<div class="math notranslate nohighlight">
+\[H(X_0) \to H(X_1) \to \cdots \to H(X_n).\]</div>
+<p>This setting is very useful for a variety of applications.
+For example, the Vietoris-Rips complex on point cloud data gives the filtration and the inclusions induce the linear maps on homology.
+However, if we do not have inclusions in our filtration, standard persistent homology cannot be applied.</p>
+<p>Zigzag persistence is a modification of persistent homology except inclusions are not required to go strictly in one direction.
+Instead we may have</p>
+<div class="math notranslate nohighlight">
+\[X_0 \leftrightarrow X_1 \leftrightarrow \cdots \leftrightarrow X_n\]</div>
+<p>where the arrows can be inclusions in either direction.
+This is called a <strong>zigzag diagram</strong>.
+This setting could be useful when looking at a collection of point clouds where we don’t have an inclusion from one point cloud into the next.</p>
+<p>In this software package, we are going to focus on a specific type of zigzag persistence.
+We will consider an <em>ordered</em> (here the order will matter) set of point clouds <span class="math notranslate nohighlight">\(X_0,X_1,\ldots,X_n\)</span> where we do not have an inclusion from one point cloud to the next.
+To use zigzag persistence, we set up inclusions as follows:</p>
+<div class="math notranslate nohighlight">
+\[X_0 \hookrightarrow X_0 \cup X_1 \hookleftarrow X_1 \hookrightarrow \cdots \hookleftarrow X_{n-1} \hookrightarrow X_{n-1} \cup X_n \hookleftarrow X_n.\]</div>
+<p>However, this only provides a set of inclusions of point clouds, so we will compute the Rips complex with a radius <span class="math notranslate nohighlight">\(r\)</span>, resulting in the following inclusions:</p>
+<div class="math notranslate nohighlight">
+\[R(X_0,r) \hookrightarrow R(X_0 \cup X_1,r) \hookleftarrow R(X_1,r) \hookrightarrow \cdots \hookleftarrow R(X_{n-1}, r)\hookrightarrow R(X_{n-1} \cup X_n,r) \hookleftarrow R(X_n,r).\]</div>
+<p>Further, the radius could be different for each <span class="math notranslate nohighlight">\(i\)</span>, giving us <span class="math notranslate nohighlight">\(R(X_i,r_i)\)</span>, then for the unions, we have <span class="math notranslate nohighlight">\(R(X_i \cup X_{i+1}, max(r_i,r_{i+1}))\)</span>, ensuring we still have inclusions.</p>
+<p>This package can compute zigzag persistence for both a fixed radius, or a different radius for each original point cloud.
+For an example of both, see <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to ZZPers’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Sarah Tymochko
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
