@@ -173,17 +173,15 @@ class PtClouds(object):
         rips.sort()
         rips_set = set(rips)
 
-        # Add all simps to the list with birth,death=[0,1]
-        for s in rips_set:
-            s.data = 0
-            simps_list.append(s)
-            times_list.append([0,1])
+        # Initialize A with set of simplices with verts in X_0
+        A = rips_set
+
+        # # Add all simps to the list with birth,death=[0,1]
+        simps_list =  simps_list + [s for s in A]
+        times_list = times_list + [[0,1] for j in range(len(A))]
 
         # Initialize with vertices for X_0
         verts = set([dio.Simplex([j+vertind],0) for j,pc in enumerate(lst[0])])
-
-        # Initialize A with set of simplices with verts in X_0
-        A = rips_set
 
         init_end = time.time()
         if verbose:
@@ -217,37 +215,33 @@ class PtClouds(object):
             for simp in rips:
 
                 # Get list of vertices of simp
-                bdy = getVerts(simp) #set([s for s in simp.boundary()])
+                bdy = getVerts(simp)
 
-                # If it has no boundary and its in B, its a vertex we haven't seen yet
-                # So add it to the list with appropriate birth,death
+                # If it has no boundary and its in B, its a vertex in B and will be handled later
                 if not bdy:
-                    if simp in B:
-                        simps_list.append(simp)
-                        times_list.append([i-0.5,i+1])
                     continue
 
                 # If all of its verts are in A, it's been handled in the initialization or the previous iteration
                 if bdy.intersection(A) == bdy:
                     continue
 
-                # If all of its verts are in B, it exists in B and in the following union
-                # Add it to the list with appropriate birth,death
+                # If all of its verts are in B, add it to B
                 elif bdy.intersection(B) == bdy:
-                    simp.data = 0
-                    simps_list.append(simp)
-                    times_list.append([i-0.5,i+1])
                     B.add(simp)
 
                 # If it has some verts in A and some in B, it only exists in the union
-                # Add to list and set birth,death appropriately
+                # Add it to M
                 else:
-                    simp.data = 0
-                    simps_list.append(simp)
-                    times_list.append([i-0.5,i])
                     M.add(simp)
 
 
+            # Add simplices in B with the corresponding birth,death times
+            simps_list = simps_list + [s for s in B]
+            times_list = times_list + [ [i-0.5,i+1] for j in range(len(B)) ]
+
+            # Add simplicies in M with corresponding birth,death times
+            simps_list = simps_list + [s for s in M]
+            times_list = times_list + [ [i-0.5,i] for j in range(len(M)) ]
 
             # Reinitialize for next iteration
             verts = verts_next
@@ -323,7 +317,12 @@ class PtClouds(object):
         rips.sort()
         rips_set = set(rips)
 
+        # Initialize A with set of simplices with verts in X_0
+        A = rips_set
+
         # Add all simps to the list with birth,death=[0,1]
+        # simps_list =  simps_list + [s for s in A]
+        # times_list = times_list + [[0,1] for j in range(len(A))]
         for s in rips_set:
             simps_list.append(s)
             times_list.append([0,1])
@@ -331,8 +330,6 @@ class PtClouds(object):
         # Initialize with vertices for X_0
         verts = set([dio.Simplex([j+vertind],0) for j,pc in enumerate(lst[0])])
 
-        # Initialize A with set of simplices with verts in X_0
-        A = rips_set
 
         init_end = time.time()
         if verbose:
@@ -444,6 +441,11 @@ class PtClouds(object):
                         simps_list.append(simp)
                         times_list.append(curr_times + [i-0.5,i])
                         M.add(simp)
+
+            # # Add simps and times that are in B
+            # simps_list = simps_list + [simp for simp in B]
+            # times_list = times_list + [[i-0.5,i] for j in range(len(B))]
+
 
 
             # print('A', A)
