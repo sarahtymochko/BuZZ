@@ -299,6 +299,8 @@ class PtClouds(object):
         # If you haven't input enough r values, just append extra of the last
         # list entry to make it the right number
         if len(r) < len(lst):
+            if verbose:
+                print('Warning: too few radii given, duplicating last entry')
             r = r + ([r[-1]]* (len(lst)- len(r)))
             self.r = r
         elif len(r) > len(lst):
@@ -424,7 +426,6 @@ class PtClouds(object):
                             B.add(simp)
 
                 # If it has some verts in A and some in B, it only exists in the union
-                # Add to list and set birth,death appropriately
                 else:
                     if simp not in simps_list:
                         simps_list.append(simp)
