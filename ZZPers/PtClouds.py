@@ -6,6 +6,7 @@ from scipy.spatial import distance_matrix
 from ZZPers.ZZPers.PD import PD
 import time
 from ripser import ripser
+from scipy.spatial.distance import euclidean
 
 ## Using a fixed radius is working... Need to add changing radius
 
@@ -433,6 +434,69 @@ class PtClouds(object):
         filtration = dio.Filtration(simps_list)
 
         return filtration, times_list
+
+
+    def plot_Zigzag(self):
+        '''
+        Plots the rips complexes including unions for zigzag complex.
+
+        '''
+
+        PC_list = list(self.ptclouds['PtCloud'])
+        delta = self.r
+
+        fig, axs = plt.subplots(1, 2*len(PC_list)-1,sharey=True, figsize=[20,2])
+
+        if type(delta) == int or type(delta) == float:
+            delta = [delta]
+
+        if len(delta) == 1:
+            delta = delta * (2*len(PC_list)-1)
+        else:
+            delta_new = []
+            delta_new.append(delta[0])
+            for i in range(0,len(delta)-1):
+                delta_new.append( max(delta[i],delta[i+1]) )
+                delta_new.append(delta[i+1])
+            delta = delta_new
+
+        pt_clouds = []
+        pt_clouds.append(PC_list[0])
+        for j in range(1,len(PC_list)):
+            pt_clouds.append(np.concatenate([PC_list[j-1],PC_list[j]]))
+            pt_clouds.append(PC_list[j])
+
+        i=0
+
+        colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        cs = [val for val in colors for _ in (0, 1)]
+
+        xmax = max(np.concatenate(PC_list)[:,0])
+        xmin = min(np.concatenate(PC_list)[:,0])
+        ymax = max(np.concatenate(PC_list)[:,1])
+        ymin = min(np.concatenate(PC_list)[:,1])
+
+        for ax in fig.axes:
+            if i%2==0:
+                ax.scatter(pt_clouds[i][:,0],pt_clouds[i][:,1],c=cs[i])
+                ax.set_title(str(int(i/2)) + '\n' + 'r = ' + str(delta[i]))
+                for p1 in pt_clouds[i]:
+                    for p2 in pt_clouds[i]:
+                        if euclidean(p1,p2) <= delta[i]:
+                            ax.plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
+                            ax.set_xlim([xmin-2,xmax+2])
+            else:
+                ax.scatter(pt_clouds[i-1][:,0],pt_clouds[i-1][:,1],c=cs[i-1])
+                ax.scatter(pt_clouds[i+1][:,0],pt_clouds[i+1][:,1],c=cs[i+1])
+                ax.set_title(str(int(i/2)) + '\n' + 'r = ' + str(delta[i]))
+                for p1 in np.concatenate([pt_clouds[i-1],pt_clouds[i+1]]):
+                    for p2 in np.concatenate([pt_clouds[i-1],pt_clouds[i+1]]):
+                        if euclidean(p1,p2) <= delta[i]:
+                            ax.plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
+                            ax.set_xlim([xmin-2,xmax+2])
+            i=i+1
+
+
 
 
 def edit_Simp_Times(simp,new_bd_times,simps_list,times_list):
