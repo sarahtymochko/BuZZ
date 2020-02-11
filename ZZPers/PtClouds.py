@@ -438,11 +438,13 @@ class PtClouds(object):
 
 
 
-def plot_Zigzag(PC_list, delta):
+def plot_Zigzag(PC_list, delta, save=False, savename=[]):
     '''
     Plots the rips complexes including unions for zigzag complex.
 
     '''
+
+    st_time = time.time()
 
     fig, axs = plt.subplots(1, 2*len(PC_list)-1,sharey=True, figsize=[20,2])
 
@@ -475,25 +477,66 @@ def plot_Zigzag(PC_list, delta):
     ymax = max(np.concatenate(PC_list)[:,1])
     ymin = min(np.concatenate(PC_list)[:,1])
 
-    for ax in fig.axes:
-        if i%2==0:
-            ax.scatter(pt_clouds[i][:,0],pt_clouds[i][:,1],c=cs[i])
-            ax.set_title(str(int(i/2)) + '\n' + 'r = ' + str(delta[i]))
-            for p1 in pt_clouds[i]:
-                for p2 in pt_clouds[i]:
-                    if euclidean(p1,p2) <= delta[i]:
-                        ax.plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
-                        ax.set_xlim([xmin-2,xmax+2])
+    for i in range(2*len(PC_list)-1):
+        if i%2 == 0:
+            axs[i].scatter(pt_clouds[i][:,0],pt_clouds[i][:,1],c=cs[i])
+            axs[i].set_title('$'+ str(int(i/2)) +'$'+ '\n' + '$r = ' + str(delta[i]) + '$')
+            axs[i].set_xlim([xmin-0.2,xmax+0.2])
+
+            for j in range(len(pt_clouds[i])):
+                for k in range(j):
+                    if euclidean(pt_clouds[i][j] ,pt_clouds[i][k]) <= delta[i]:
+                        axs[i].plot([pt_clouds[i][j][0],pt_clouds[i][k][0]],
+                                    [pt_clouds[i][j][1],pt_clouds[i][k][1]],
+                                    c='k')
+                    if i > 0:
+                        if euclidean(pt_clouds[i][j] ,pt_clouds[i][k]) <= delta[i-1]:
+                            axs[i-1].plot([pt_clouds[i][j][0],pt_clouds[i][k][0]],
+                                        [pt_clouds[i][j][1],pt_clouds[i][k][1]],
+                                        c='k')
+                    if i < 2*len(PC_list)-2:
+                        if euclidean(pt_clouds[i][j] ,pt_clouds[i][k]) <= delta[i+1]:
+                            axs[i+1].plot([pt_clouds[i][j][0],pt_clouds[i][k][0]],
+                                        [pt_clouds[i][j][1],pt_clouds[i][k][1]],
+                                        c='k')
         else:
-            ax.scatter(pt_clouds[i-1][:,0],pt_clouds[i-1][:,1],c=cs[i-1])
-            ax.scatter(pt_clouds[i+1][:,0],pt_clouds[i+1][:,1],c=cs[i+1])
-            ax.set_title(str(int(i/2)) + '\n' + 'r = ' + str(delta[i]))
-            for p1 in np.concatenate([pt_clouds[i-1],pt_clouds[i+1]]):
-                for p2 in np.concatenate([pt_clouds[i-1],pt_clouds[i+1]]):
+            axs[i].scatter(pt_clouds[i-1][:,0],pt_clouds[i-1][:,1],c=cs[i-1])
+            axs[i].scatter(pt_clouds[i+1][:,0],pt_clouds[i+1][:,1],c=cs[i+1])
+            axs[i].set_title('$'+ str(i/2) +'$'+ '\n' + '$r = ' + str(delta[i]) + '$')
+
+            axs[i].set_xlim([xmin-0.2,xmax+0.2])
+
+            for p1 in pt_clouds[i-1]:
+                for p2 in pt_clouds[i+1]:
                     if euclidean(p1,p2) <= delta[i]:
-                        ax.plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
-                        ax.set_xlim([xmin-2,xmax+2])
-        i=i+1
+                        axs[i].plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
+        print('Done with', i)
+
+    end_time = time.time()
+    print('Time to plot:', end_time-st_time)
+
+    if save:
+        plt.savefig(savename, dpi=500, bbox_inches='tight')
+
+    # for ax in fig.axes:
+    #     if i%2==0:
+    #         ax.scatter(pt_clouds[i][:,0],pt_clouds[i][:,1],c=cs[i])
+    #         ax.set_title(str(int(i/2)) + '\n' + 'r = ' + str(delta[i]))
+    #         for p1 in pt_clouds[i]:
+    #             for p2 in pt_clouds[i]:
+    #                 if euclidean(p1,p2) <= delta[i]:
+    #                     ax.plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
+    #                     ax.set_xlim([xmin-2,xmax+2])
+    #     else:
+    #         ax.scatter(pt_clouds[i-1][:,0],pt_clouds[i-1][:,1],c=cs[i-1])
+    #         ax.scatter(pt_clouds[i+1][:,0],pt_clouds[i+1][:,1],c=cs[i+1])
+    #         ax.set_title(str(int(i/2)) + '\n' + 'r = ' + str(delta[i]))
+    #         for p1 in np.concatenate([pt_clouds[i-1],pt_clouds[i+1]]):
+    #             for p2 in np.concatenate([pt_clouds[i-1],pt_clouds[i+1]]):
+    #                 if euclidean(p1,p2) <= delta[i]:
+    #                     ax.plot([p1[0],p2[0]],[p1[1],p2[1]],c='k')
+    #                     ax.set_xlim([xmin-2,xmax+2])
+    #     i=i+1
 
 
 def edit_Simp_Times(simp,new_bd_times,simps_list,times_list):
