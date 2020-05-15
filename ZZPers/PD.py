@@ -3,7 +3,6 @@ import numpy as np
 import dionysus as dio
 import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.spatial import distance_matrix
 
 class PD(object):
     '''

@@ -69,7 +69,10 @@ setup(
           'sklearn',
           'pandas',
           'dionysus',
-          'ripser'
+          'ripser',
+          'time',
+          'gudhi',
+          'random'
       ],
 
       include_package_data=True,
