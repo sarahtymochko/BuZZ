@@ -657,35 +657,50 @@ class PtClouds(object):
         PC_list = list(self.ptclouds['PtCloud'])
         All_PC = np.vstack(PC_list)
         
-        xmin = min(All_PC[:,0]) - 2
-        xmax = max(All_PC[:,0]) + 2
+        xmin = min(All_PC[:,0]) - 0.5 #0.1*min(All_PC[:,0])
+        xmax = max(All_PC[:,0]) + 0.5 #0.1*max(All_PC[:,0]) 
+        
+        ymin = min(All_PC[:,1]) - 0.5 #0.1*min(All_PC[:,1])
+        ymax = max(All_PC[:,1]) + 0.5 #0.1*max(All_PC[:,1])
 
-        plt.rcParams.update({'font.size': 18})
+#         plt.rcParams.update({'font.size': 18})
 
-        fig, axs = plt.subplots(1, int((2*len(PC_list)-1)),sharey=True, figsize=[20,2])
-
+        x_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
+        y_plts = 8
+        fig, axs = plt.subplots(x_plts, y_plts ,sharey=True, figsize=[20,x_plts*3])
+        axs = axs.ravel()
+        
         # Make color list
         cs = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
         # Make sure color list is long enough
         if len(PC_list) > 10:
-            cs = cs * int(np.ceil(len(PCs)/10))
+            cs = cs * int(np.ceil(len(PC_list)/10))
 
         # Plotting...
-        for i,ax in enumerate(fig.axes):
+        for i,ax in enumerate(axs):
+            
+            if i >= 2*len(PC_list)-1:
+                ax.axis('off')
+                continue
+                
             # Plot point clouds alone
             if i%2==0:
                 ax.scatter(PC_list[int(i/2)][:,0], PC_list[int(i/2)][:,1], c=cs[int(i/2)])
-                ax.set_title( f'$X_{str(int(i/2))}$' ) #int(i/2))
+                ax.set_title( '$X_{'+str(int(i/2))+'}$' ) #int(i/2))
                 ax.set_xlim([xmin,xmax])
+                ax.set_ylim([ymin,ymax])
                 
             # Plot union of point clouds
             else:
                 ax.scatter(PC_list[int((i-1)/2)][:,0], PC_list[int((i-1)/2)][:,1], c=cs[int((i-1)/2)])
                 ax.scatter(PC_list[int((i+1)/2)][:,0], PC_list[int((i+1)/2)][:,1], c=cs[int((i+1)/2)])
-                ax.set_title( f'$X_{str(int((i-1)/2))} \cup X_{str(int((i+1)/2))}$' ) 
+                ax.set_title( '$X_{'+str(int((i-1)/2))+'} \cup X_{' + str(int((i+1)/2)) + '}$' ) 
                 ax.set_xlim([xmin,xmax])
+                ax.set_ylim([ymin,ymax])
 
+        plt.tight_layout(pad=2.0)
+        
         # Save figure
         if save:
             print('Saving fig at ', savename, '...')
@@ -714,27 +729,38 @@ class PtClouds(object):
         PC_list = list(self.ptclouds_full['PtCloud'])
         All_PC = np.vstack(PC_list)
         
-        xmin = min(All_PC[:,0]) - 2
-        xmax = max(All_PC[:,0]) + 2
+        xmin = min(All_PC[:,0]) - 0.5
+        xmax = max(All_PC[:,0]) + 0.5
+        
+        ymin = min(All_PC[:,1]) - 0.5
+        ymax = max(All_PC[:,1]) + 0.5
+        
+#         plt.rcParams.update({'font.size': 18})
 
-        plt.rcParams.update({'font.size': 18})
-
-        fig, axs = plt.subplots(1, int((2*len(PC_list)-1)),sharey=True, figsize=[20,2])
-
+        x_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
+        y_plts = 8
+        fig, axs = plt.subplots(x_plts, y_plts ,sharey=True, figsize=[20,x_plts*3])
+        axs = axs.ravel()
+        
         # Make color list
         cs = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
         # Make sure color list is long enough
         if len(PC_list) > 10:
-            cs = cs * int(np.ceil(len(PCs)/10))
+            cs = cs * int(np.ceil(len(PC_list)/10))
 
         # Plotting...
-        for i,ax in enumerate(fig.axes):
+        for i,ax in enumerate(axs):
+            if i >= 2*len(PC_list)-1:
+                ax.axis('off')
+                continue
+                
             # Plot point clouds alone
             if i%2==0:
                 ax.scatter(PC_list[int(i/2)][:,0], PC_list[int(i/2)][:,1], c=cs[int(i/2)])
                 ax.set_title( f'$X_{str(int(i/2))}$' ) #int(i/2))
                 ax.set_xlim([xmin,xmax])
+                ax.set_ylim([ymin,ymax])
                 
             # Plot union of point clouds
             else:
@@ -742,7 +768,10 @@ class PtClouds(object):
                 ax.scatter(PC_list[int((i+1)/2)][:,0], PC_list[int((i+1)/2)][:,1], c=cs[int((i+1)/2)])
                 ax.set_title( f'$X_{str(int((i-1)/2))} \cup X_{str(int((i+1)/2))}$' ) 
                 ax.set_xlim([xmin,xmax])
+                ax.set_ylim([ymin,ymax])
 
+        plt.tight_layout(pad=2.0)
+        
         # Save figure
         if save:
             print('Saving fig at ', savename, '...')
@@ -772,43 +801,57 @@ class PtClouds(object):
         PC_list = list(self.ptclouds['PtCloud'])
         All_PC = np.vstack(PC_list)
         
-        xmin = min(All_PC[:,0]) - 2
-        xmax = max(All_PC[:,0]) + 2
+        xmin = min(All_PC[:,0]) - 0.5
+        xmax = max(All_PC[:,0]) + 0.5
+        
+        ymin = min(All_PC[:,1]) - 0.5
+        ymax = max(All_PC[:,1]) + 0.5
 
-        plt.rcParams.update({'font.size': 18})
+#         plt.rcParams.update({'font.size': 18})
 
-        fig, axs = plt.subplots(1, int((2*len(PC_list)-1)),sharey=True, figsize=[20,2])
-
+        x_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
+        y_plts = 8
+        fig, axs = plt.subplots(x_plts, y_plts ,sharey=True, figsize=[20,x_plts*3])
+        axs = axs.ravel()
+    
         # Make color list
         cs = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
         # Make sure color list is long enough
         if len(PC_list) > 10:
-            cs = cs * int(np.ceil(len(PCs)/10))
+            cs = cs * (int(np.ceil(len(PC_list)/10)) +1)
 
         # Plotting vertices
-        for i,ax in enumerate(fig.axes):
+        for i,ax in enumerate(axs):
+            
+            if i >= 2*len(PC_list)-1:
+                ax.axis('off')
+                continue
+                
             # Plot point clouds alone
             if i%2==0:
                 ax.scatter(PC_list[int(i/2)][:,0], PC_list[int(i/2)][:,1], c=cs[int(i/2)])
                 if self.cplx_type == 'rips' or self.cplx_type == 'landmark':
-                    ax.set_title( f'$R(X_{str(int(i/2))},{self.r[int(i/2)]})$' )
+                    ax.set_title( '$R(X_{' + str(int(i/2))+ '},' +str(self.r[int(i/2)])+ ')$' )
                 elif self.cplx_type == 'witness':
                     ax.set_title( f'$W(X_{str(int(i/2))})$' )
                 ax.set_xlim([xmin,xmax])
+                ax.set_ylim([ymin,ymax])
                 
             # Plot union of point clouds
             else:
                 ax.scatter(PC_list[int((i-1)/2)][:,0], PC_list[int((i-1)/2)][:,1], c=cs[int((i-1)/2)])
                 ax.scatter(PC_list[int((i+1)/2)][:,0], PC_list[int((i+1)/2)][:,1], c=cs[int((i+1)/2)])
                 if self.cplx_type == 'rips' or self.cplx_type == 'landmark':
-                    ax.set_title( f'$R(X_{str(int((i-1)/2))} \cup X_{str(int((i+1)/2))}, {max(self.r[int((i-1)/2)], self.r[int((i+1)/2)])})$' ) 
+                    ax.set_title('$R(X_{' + str(int((i-1)/2)) + '} \cup X_{' + str(int((i+1)/2))+ '}, '+ str(max(self.r[int((i-1)/2)], self.r[int((i+1)/2)])) + ')$' ) 
+                                 
                 elif self.cplx_type == 'witness':
                     ax.set_title( f'$W(X_{str(int((i-1)/2))} \cup X_{str(int((i+1)/2))})$' ) 
                 ax.set_xlim([xmin,xmax])
+                ax.set_ylim([ymin,ymax])
 
 
-        # Plottinng edges
+        # Plotting edges
         for i, s in enumerate(self.filtration):
             if s.dimension() == 1: 
                 vs = [v for v in s]
@@ -818,6 +861,9 @@ class PtClouds(object):
                         break
                     else:
                         axs[j].plot( [All_PC[vs[0]][0], All_PC[vs[1]][0]], [All_PC[vs[0]][1], All_PC[vs[1]][1]], c='k' )
+                        
+        plt.tight_layout(pad=2.0)
+        
         # Save figure
         if save:
             print('Saving fig at ', savename, '...')
