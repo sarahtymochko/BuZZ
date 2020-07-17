@@ -3,8 +3,8 @@ import dionysus as dio
 import pandas as pd
 import matplotlib.pyplot as plt
 # from scipy.spatial import distance_matrix
-from ZZPers.ZZPers.PD import PD
-from ZZPers.ZZPers.Extras import MinMaxSubsample
+from ZZPers.PD import PD
+from ZZPers.Extras import MinMaxSubsample
 import time
 from ripser import ripser
 # from scipy.spatial.distance import euclidean
