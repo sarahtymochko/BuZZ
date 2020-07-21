@@ -8,7 +8,6 @@ from ZZPers.Extras import MinMaxSubsample
 import time
 from ripser import ripser
 # from scipy.spatial.distance import euclidean
-import gudhi
 
 
 class PtClouds(object):
