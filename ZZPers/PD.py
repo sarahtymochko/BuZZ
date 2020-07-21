@@ -82,7 +82,8 @@ class PD(object):
 
         # Get the max birth/death time if it's not already specified
         if not boundary:
-            boundary = np.amax(D)+epsilon
+            print(max(Dinf[:,0]))
+            boundary = max(np.amax(D)+epsilon, max(Dinf[:,0])+epsilon)
 
         # if fig is None:
         #     fig = plt.figure()
