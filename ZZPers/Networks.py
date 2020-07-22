@@ -6,6 +6,7 @@ import time
 from ripser import ripser
 from scipy.spatial.distance import squareform
 
+# Note this import statement will probably need to change
 import script.PHN as PHN
 
 

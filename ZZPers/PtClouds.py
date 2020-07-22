@@ -2,12 +2,9 @@ import numpy as np
 import dionysus as dio
 import pandas as pd
 import matplotlib.pyplot as plt
-# from scipy.spatial import distance_matrix
-# from ZZPers.PD import PD
 from ZZPers.Extras import MinMaxSubsample
 import time
 from ripser import ripser
-# from scipy.spatial.distance import euclidean
 import gudhi
 # from persim import plot_diagrams
 
@@ -84,7 +81,7 @@ class PtClouds(object):
             self.ptclouds.loc[i,'PtCloud'] = MinMaxSubsample(pc, num_landmarks, seed=None)
 
 
-    def run_Zigzag(self, k=2, r=None, alpha=None):
+    def run_Zigzag(self, r, k=2, alpha=None):
         '''
         Runs zigzag persistence on collections of point clouds, taking unions between each adjacent pair of point clouds.
         Adds attributes to class ``zz``, ``zz_dgms``, ``zz_cells`` which are the outputs of dionysus' zigzag persistence function.
@@ -106,40 +103,27 @@ class PtClouds(object):
 
         self.k = k
 
-        # Error checking for rips and landmark complex
-        if self.cplx_type == 'rips' or self.cplx_type == 'landmark':
-            if r == None:
-                print('Parameter r is required to use rips or landmark complex')
-                print('Quitting...')
-                return
-            else:
-                self.r = r
+        if type(r) == list:
+            if len(set(r)) == 1:
+                self.r = r[0]
+        else:
+            self.r = r
 
-        # Error checking for witness complex
-        if self.cplx_type == 'witness':
-            print('Uh oh... Witness complex not set up yet... Quitting...')
+        if self.cplx_type not in ['rips', 'landmark']:
+            print("Complex type not recognized...")
+            print("Options are: 'rips', 'landmark'")
+            print("Try again...")
             return
-            if alpha == None:
-                print('Parameter alpha is required to use witness complex')
-                print('Quitting...')
-                return
-            else:
-                self.alpha = alpha
 
         # Set up inputs for dionysus zigzag persistence
         ft_st = time.time()
-        if self.cplx_type == 'rips' or self.cplx_type == 'landmark':
-            if type(r) == float or type(r) == int:
-                filtration, times = self.setup_Zigzag_fixed(r = self.r, k = self.k, verbose = self.verbose)
-            else:
-                filtration, times = self.setup_Zigzag_changing(r = self.r, k = self.k, verbose = self.verbose)
-        elif self.cplx_type == 'witness':
-            filtration, times = self.setup_Zigzag_witness(alpha = self.alpha, num_landmarks = self.num_landmarks, k = self.k, verbose = self.verbose)
+
+
+        if type(self.r) == float or type(self.r) == int:
+            filtration, times = self.setup_Zigzag_fixed(r = self.r, k = self.k, verbose = self.verbose)
         else:
-            print("Complex type not recognized...")
-            print("Options are: 'Rips', 'Landmark', 'Witness'")
-            print("Try again...")
-            return
+            filtration, times = self.setup_Zigzag_changing(r = self.r, k = self.k, verbose = self.verbose)
+
         ft_end = time.time()
 
         self.filtration = filtration
@@ -354,12 +338,11 @@ class PtClouds(object):
             if verbose:
                 print('Warning: too few radii given, duplicating last entry')
             r = r + ([r[-1]]* (len(lst)- len(r)))
-            self.r = r
         elif len(r) > len(lst):
             if verbose:
                 print('Warning: too many radii given, only using first ', len(lst))
             r = r[:len(lst)]
-            self.r = r
+        self.r = r
 
         # simps_df = pd.DataFrame(columns = ['Simp','B,D'])
         simps_list = []; times_list = []
