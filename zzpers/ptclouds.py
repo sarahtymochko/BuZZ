@@ -119,7 +119,7 @@ class PtClouds(object):
         ft_st = time.time()
 
 
-        if self.r.dtype == float or self.r.dtype == int:
+        if type(self.r) == float or type(self.r) == int:
             filtration, times = self.setup_Zigzag_fixed(r = self.r, k = self.k, verbose = self.verbose)
         else:
             filtration, times = self.setup_Zigzag_changing(r = self.r, k = self.k, verbose = self.verbose)
