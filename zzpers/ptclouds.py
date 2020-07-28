@@ -785,6 +785,11 @@ class PtClouds(object):
         PC_list = list(self.ptclouds['PtCloud'])
         All_PC = np.vstack(PC_list)
 
+        if type(self.r) != list:
+            r_plot = [self.r]*(2*len(PC_list)-1)
+        else:
+            r_plot = self.r
+
         xmin = min(All_PC[:,0]) - 0.5
         xmax = max(All_PC[:,0]) + 0.5
 
@@ -816,7 +821,7 @@ class PtClouds(object):
             if i%2==0:
                 ax.scatter(PC_list[int(i/2)][:,0], PC_list[int(i/2)][:,1], c=cs[int(i/2)])
                 if self.cplx_type == 'rips' or self.cplx_type == 'landmark':
-                    ax.set_title( '$R(X_{' + str(int(i/2))+ '},' +str(self.r[int(i/2)])+ ')$' )
+                    ax.set_title( '$R(X_{' + str(int(i/2))+ '},' +str(r_plot[int(i/2)])+ ')$' )
                 elif self.cplx_type == 'witness':
                     ax.set_title( f'$W(X_{str(int(i/2))})$' )
                 ax.set_xlim([xmin,xmax])
@@ -827,7 +832,7 @@ class PtClouds(object):
                 ax.scatter(PC_list[int((i-1)/2)][:,0], PC_list[int((i-1)/2)][:,1], c=cs[int((i-1)/2)])
                 ax.scatter(PC_list[int((i+1)/2)][:,0], PC_list[int((i+1)/2)][:,1], c=cs[int((i+1)/2)])
                 if self.cplx_type == 'rips' or self.cplx_type == 'landmark':
-                    ax.set_title('$R(X_{' + str(int((i-1)/2)) + '} \cup X_{' + str(int((i+1)/2))+ '}, '+ str(max(self.r[int((i-1)/2)], self.r[int((i+1)/2)])) + ')$' )
+                    ax.set_title('$R(X_{' + str(int((i-1)/2)) + '} \cup X_{' + str(int((i+1)/2))+ '}, '+ str(max(r_plot[int((i-1)/2)], r_plot[int((i+1)/2)])) + ')$' )
 
                 elif self.cplx_type == 'witness':
                     ax.set_title( f'$W(X_{str(int((i-1)/2))} \cup X_{str(int((i+1)/2))})$' )
