@@ -786,7 +786,11 @@ class PtClouds(object):
         All_PC = np.vstack(PC_list)
 
         if type(self.r) != list:
+<<<<<<< HEAD
             r_plot = [self.r]*(2*len(PC_list)-1)
+=======
+            r_plot = list(self.r)*(2*len(PC_list)-1)
+>>>>>>> ea5d5326b2d2513586a0058fb520cbc6c5a7be7b
         else:
             r_plot = self.r
 
