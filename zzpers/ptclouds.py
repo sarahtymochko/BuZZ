@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from zzpers.utils import MinMaxSubsample
 import time
 from ripser import ripser
-import gudhi
+# import gudhi
 # from persim import plot_diagrams
 
 
