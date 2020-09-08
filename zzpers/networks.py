@@ -275,7 +275,7 @@ class Networks(object):
             times_list.append(s_times)
 
         if self.verbose:
-            print(f"Added {num_tris} edges to filtration.")
+            print(f"Added {num_tris} triangles to filtration.")
 
         f_st = time.time()
         filtration = dio.Filtration(simps_list)
