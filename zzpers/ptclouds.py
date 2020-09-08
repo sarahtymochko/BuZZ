@@ -5,12 +5,8 @@ import matplotlib.pyplot as plt
 from zzpers.utils import MinMaxSubsample
 import time
 from ripser import ripser
-<<<<<<< HEAD:ZZPers/PtClouds.py
-# from scipy.spatial.distance import euclidean
-=======
 # import gudhi
 # from persim import plot_diagrams
->>>>>>> NewFeatures:zzpers/ptclouds.py
 
 
 class PtClouds(object):
