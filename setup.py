@@ -26,7 +26,6 @@ setup(
       # License
       license = 'GNU GPL',
 
-
       # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
               # How mature is this project? Common values are
@@ -43,12 +42,7 @@ setup(
               'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
 
               # Supported versions of python
-              # Can include multiple, however currently only tested on Liz's system, Python 3.5.2
-              # 'Programming Language :: Python :: 3',
-              # 'Programming Language :: Python :: 3.3',
-              # 'Programming Language :: Python :: 3.4',
-              'Programming Language :: Python :: 3.5',
-              'Programming Language :: Python :: 3.5.2',
+              'Programming Language :: Python :: 3'
               ],
 
 
@@ -71,7 +65,6 @@ setup(
           'dionysus',
           'ripser',
           'time',
-          'gudhi',
           'random'
       ],
 

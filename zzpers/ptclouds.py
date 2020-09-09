@@ -149,33 +149,33 @@ class PtClouds(object):
         self.zigzag_time = zz_end - zz_st
 
 
-    def run_Ripser(self,maxdim=1,thresh=np.inf):
-        '''
-        Function to run Ripser on all point clouds in the list and save them in the 'Dgms' column of the `ptclouds` attribute as a column of the DataFrame.
-
-        Parameters
-        ----------
-
-        maxdim: int, optional
-            Maximum homology dimension computed (default is 1)
-
-        thresh: float, optional
-            Maximum distances considered when constructing filtration (default is np.inf, meaning whole filtration is calculated)
-
-        '''
-        st_ripser = time.time()
-        dgms_list = []
-        for PC in list(self.ptclouds['PtCloud']):
-            diagrams = ripser(PC,maxdim=maxdim, thresh=thresh)['dgms']
-            dgms_dict = {i: diagrams[i] for i in range(len(diagrams))}
-
-            dgms_list.append(dgms_dict)
-
-        end_ripser = time.time()
-
-        if self.verbose:
-            print('Time to compute persistence: ', str(end_ripser-st_ripser))
-        self.ptclouds['Dgms'] = dgms_list
+    # def run_Ripser(self,maxdim=1,thresh=np.inf):
+    #     '''
+    #     Function to run Ripser on all point clouds in the list and save them in the 'Dgms' column of the `ptclouds` attribute as a column of the DataFrame.
+    #
+    #     Parameters
+    #     ----------
+    #
+    #     maxdim: int, optional
+    #         Maximum homology dimension computed (default is 1)
+    #
+    #     thresh: float, optional
+    #         Maximum distances considered when constructing filtration (default is np.inf, meaning whole filtration is calculated)
+    #
+    #     '''
+    #     st_ripser = time.time()
+    #     dgms_list = []
+    #     for PC in list(self.ptclouds['PtCloud']):
+    #         diagrams = ripser(PC,maxdim=maxdim, thresh=thresh)['dgms']
+    #         dgms_dict = {i: diagrams[i] for i in range(len(diagrams))}
+    #
+    #         dgms_list.append(dgms_dict)
+    #
+    #     end_ripser = time.time()
+    #
+    #     if self.verbose:
+    #         print('Time to compute persistence: ', str(end_ripser-st_ripser))
+    #     self.ptclouds['Dgms'] = dgms_list
 
     def setup_Zigzag_fixed(self, r, k=2, verbose=False):
         '''
