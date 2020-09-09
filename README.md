@@ -1,10 +1,10 @@
-# ZZPers
+# zzpers
 
 
 Description
 ===========
 
-This package provides python code to compute zigzag persistence from point cloud data by employing code from Dionysus 2. 
+This package provides python code to compute zigzag persistence from point cloud data by leveraging code from Dionysus 2. 
 
 Requirements
 ============
