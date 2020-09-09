@@ -1,0 +1,7 @@
+.DS_Store
+.ipynb_checkpoints/
+__pycache__/
+build/html/_sources
+build/html/_static
+build/doctrees
+source/
