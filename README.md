@@ -23,5 +23,6 @@ Sarah Tymochko: [tymochko@egr.msu.edu](mailto:tymochko@egr.msu.edu).
 Paper
 =============
 
-Will be on arXiv soon: 
+Will be on arXiv soon:
+
 Sarah Tymochko, Elizabeth Munch, Firas Khasawneh. Using Zigzag Persistent Homology to Detect Bifurcations in Dynamical Systems. Preprint, 2020.

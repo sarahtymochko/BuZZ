@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 from zzpers.utils import MinMaxSubsample
 import time
 from ripser import ripser
-# import gudhi
-# from persim import plot_diagrams
+import warnings
 
 
 class PtClouds(object):
@@ -24,7 +23,7 @@ class PtClouds(object):
 
     '''
 
-    def __init__(self, ptclouds, cplx_type='Rips', num_landmarks=None, verbose=False):
+    def __init__(self, ptclouds, cplx_type='rips', num_landmarks=None, verbose=False):
         '''
         Initialize.
 
@@ -40,7 +39,11 @@ class PtClouds(object):
 
         self.num_landmarks = num_landmarks
 
-        self.cplx_type = cplx_type.lower()
+        if cplx_type.lower() not in ['rips', 'landmark']:
+            warnings.warn("Complex type not recognized. Setting to rips by default.")
+            self.cplx_type = 'rips'
+        else:
+            self.cplx_type = cplx_type.lower()
 
         self.verbose = verbose
 
@@ -81,7 +84,7 @@ class PtClouds(object):
             self.ptclouds.loc[i,'PtCloud'] = MinMaxSubsample(pc, num_landmarks, seed=None)
 
 
-    def run_Zigzag(self, r, k=2, alpha=None):
+    def run_Zigzag(self, r, k=2):
         '''
         Runs zigzag persistence on collections of point clouds, taking unions between each adjacent pair of point clouds.
         Adds attributes to class ``zz``, ``zz_dgms``, ``zz_cells`` which are the outputs of dionysus' zigzag persistence function.
@@ -94,41 +97,38 @@ class PtClouds(object):
             Maximum dimension simplex desired (default is 2)
 
         r: float or list of floats,
-            Parameter for Rips complex on each point cloud. Can be a single number or a list with one value per point cloud. (Required for using Rips or Landmark complex)
-
-        alpha: float
-            Parameter for the Witness complex (Required for using Witness complex)
+            Parameter for Rips complex on each point cloud. Can be a single number or a list with one value per point cloud.
 
         '''
 
         self.k = k
 
+        # Type check r and see if need to use fixed or changing radius
         if type(r) == list:
+            # if there's only one entry in the list, only need fixed radius version
             if len(set(r)) == 1:
                 self.r = r[0]
-        else:
+            # if it's a list, keep all and use changing radius versionn
+            else:
+                self.r = r
+        elif type(r) == int or type(r) == float:
             self.r = r
-
-        if self.cplx_type not in ['rips', 'landmark']:
-            print("Complex type not recognized...")
-            print("Options are: 'rips', 'landmark'")
-            print("Try again...")
+        else:
+            warnings.warn("Input for r is invalid. Retry with list, int or float")
             return
 
-        # Set up inputs for dionysus zigzag persistence
         ft_st = time.time()
 
-
+        # Set up inputs for dionysus zigzag persistence
         if type(self.r) == float or type(self.r) == int:
             filtration, times = self.setup_Zigzag_fixed(r = self.r, k = self.k, verbose = self.verbose)
         else:
             filtration, times = self.setup_Zigzag_changing(r = self.r, k = self.k, verbose = self.verbose)
 
-        ft_end = time.time()
-
         self.filtration = filtration
         self.times_list = times
 
+        ft_end = time.time()
         if self.verbose:
             print('Time to build filtration, times: ', str(ft_end-ft_st))
 
@@ -139,7 +139,7 @@ class PtClouds(object):
 
         if self.verbose:
             print('Time to compute zigzag: ', str(zz_end-zz_st))
-            # print('\nTotal Time: ', str(end_zz - st_getallcplx), '\n')
+            print('Total Time: ', str(zz_end - ft_st), '\n')
 
         self.zz = zz
         self.zz_dgms = [ np.array([ [p.birth,p.death] for p in dgm]) for dgm in dgms ]
