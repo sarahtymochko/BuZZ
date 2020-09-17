@@ -2,7 +2,7 @@ import numpy as np
 import dionysus as dio
 import pandas as pd
 import matplotlib.pyplot as plt
-from zzpers.utils import MinMaxSubsample
+from zzpers.utils import minmaxsubsample
 import time
 from ripser import ripser
 import warnings
@@ -81,7 +81,7 @@ class PtClouds(object):
         # Subsample num_landmarks points from each point cloud using MinMax approach
         self.ptclouds = pd.DataFrame(columns=['PtCloud'])
         for i, pc in enumerate(self.ptclouds_full['PtCloud']):
-            self.ptclouds.loc[i,'PtCloud'] = MinMaxSubsample(pc, num_landmarks, seed=None)
+            self.ptclouds.loc[i,'PtCloud'] = minmaxsubsample(pc, num_landmarks, seed=None)
 
 
     def run_Zigzag(self, r, k=2):
@@ -141,8 +141,10 @@ class PtClouds(object):
             print('Time to compute zigzag: ', str(zz_end-zz_st))
             print('Total Time: ', str(zz_end - ft_st), '\n')
 
+        dgms = [ np.array([ [p.birth,p.death] for p in dgm]) for dgm in dgms ]
+
         self.zz = zz
-        self.zz_dgms = [ np.array([ [p.birth,p.death] for p in dgm]) for dgm in dgms ]
+        self.zz_dgms = dgms[0:k] # only keep appropriate dimensions
         self.zz_cells = cells
 
         self.setup_time = ft_end - ft_st
