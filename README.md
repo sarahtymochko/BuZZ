@@ -1,4 +1,4 @@
-# zzpers
+# Bifurcations using ZigZag (BuZZ)
 
 **Documentation improvements coming soon :)**
 
