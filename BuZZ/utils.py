@@ -29,6 +29,6 @@ def minmaxsubsample(pts, n, seed=3):
 def time_delay_embedding(ts, d=2, tau=1):
     numpts = len(ts) - tau * (d-1)
 
-    pts = [[data[i+(j*tau)] for j in range(dim) ] for i in range(npts)]
+    pts = [[ts[i+(j*tau)] for j in range(d) ] for i in range(numpts)]
 
     return np.array(pts)

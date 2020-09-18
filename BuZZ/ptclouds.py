@@ -2,7 +2,7 @@ import numpy as np
 import dionysus as dio
 import pandas as pd
 import matplotlib.pyplot as plt
-from zzpers.utils import minmaxsubsample
+from BuZZ.utils import minmaxsubsample
 import time
 from ripser import ripser
 import warnings
