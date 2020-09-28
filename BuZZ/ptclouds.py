@@ -476,7 +476,7 @@ class PtClouds(object):
 
 
 
-    def plot_ZZ_PtClouds(self, save=False, savename='PC.png'):
+    def plot_ZZ_PtClouds(self, save=False, savename='PC.png', v_plts=None, h_plts=None):
         '''
         Plot the point clouds used
 
@@ -506,9 +506,15 @@ class PtClouds(object):
 
 #         plt.rcParams.update({'font.size': 18})
 
-        x_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
-        y_plts = 8
-        fig, axs = plt.subplots(x_plts, y_plts ,sharey=True, figsize=[20,x_plts*3])
+        if h_plts is not None:
+            v_plts = int(np.ceil( (2*len(PC_list)-1)/ h_plts ))
+        elif v_plts is not None:
+            h_plts = int(np.ceil( (2*len(PC_list)-1)/ v_plts ))
+        else:
+            v_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
+            h_plts = 8
+
+        fig, axs = plt.subplots(h_plts, v_plts ,sharey=True, figsize=[v_plts*3,h_plts*3])
         axs = axs.ravel()
 
         # Make color list
@@ -548,7 +554,7 @@ class PtClouds(object):
             plt.savefig(savename, dpi=500, bbox_inches='tight')
 
 
-    def plot_ZZ_Full_PtClouds(self, save=False, savename='PC_Full.png'):
+    def plot_ZZ_Full_PtClouds(self, save=False, savename='PC_Full.png', v_plts=None, h_plts=None):
         '''
         Plot the point clouds used
 
@@ -578,9 +584,15 @@ class PtClouds(object):
 
 #         plt.rcParams.update({'font.size': 18})
 
-        x_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
-        y_plts = 8
-        fig, axs = plt.subplots(x_plts, y_plts ,sharey=True, figsize=[20,x_plts*3])
+        if h_plts is not None:
+            v_plts = int(np.ceil( (2*len(PC_list)-1)/ h_plts ))
+        elif v_plts is not None:
+            h_plts = int(np.ceil( (2*len(PC_list)-1)/ v_plts ))
+        else:
+            v_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
+            h_plts = 8
+
+        fig, axs = plt.subplots(h_plts, v_plts ,sharey=True, figsize=[v_plts*3,h_plts*3])
         axs = axs.ravel()
 
         # Make color list
