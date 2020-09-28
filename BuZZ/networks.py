@@ -16,6 +16,12 @@ class Networks(object):
 
     Parameters
     ----------
+    networks: list of np.arrays
+        List of adjacency matrices for the networks
+    vert_labels: list of lists
+        List of lists of labels of the vertices corresponding
+    cplx_type: string
+        Type of zigzag, options are 'intersection' or 'union'
     verbose: bool
         If true, prints updates when running code. Default is False.
 
@@ -53,18 +59,6 @@ class Networks(object):
         Runs zigzag persistence on collections of point clouds, taking unions between each adjacent pair of point clouds.
         Adds attributes to class ``zz``, ``zz_dgms``, ``zz_cells`` which are the outputs of dionysus' zigzag persistence function.
         Also adds attributes ``setup_time`` and ``zigzag_time`` with timing data.
-
-        Parameters
-        ----------
-
-        k: int, optional
-            Maximum dimension simplex desired (default is 2)
-
-        r: float or list of floats,
-            Parameter for Rips complex on each point cloud. Can be a single number or a list with one value per point cloud. (Required for using Rips or Landmark complex)
-
-        alpha: float
-            Parameter for the Witness complex (Required for using Witness complex)
 
         '''
 
@@ -285,6 +279,28 @@ class Networks(object):
 
 
 def build_network(ts, d, tau, directed=True):
+    '''
+    Build ordinal partition network.
+
+    Parameters
+    ----------
+
+    d: int
+        Dimension
+    tau: int
+        Delay
+    directed: bool (optional)
+        Set to False to use undirected network. Default is True.
+
+    Returns
+    -------
+    A: np.array
+        Adjacency matrix
+
+    perm_keys: list
+        List of labels of the vertices corresponding to the adjacency matrix
+
+    '''
     PS = PHN.Permutation_Sequence(ts,d,tau)
 
     ## Build adjacency matrix

@@ -3,6 +3,20 @@ from sklearn.metrics.pairwise import pairwise_distances
 import random
 
 def minmaxsubsample(pts, n, seed=3):
+    '''
+    Subsample points using greedy permutation algorithm.
+
+    Parameters
+    ----------
+    pts: np.array
+        Points in point cloud.
+    n: int
+        Number of points to subsample. Default is None, meaning no subsampling.
+    seed: int
+        Seed for random generation of starting point.
+
+    '''
+
     # Get pairwise distance matrix of all points
     D = pairwise_distances(pts, metric='euclidean')
 
@@ -27,6 +41,19 @@ def minmaxsubsample(pts, n, seed=3):
     return newpts
 
 def time_delay_embedding(ts, d=2, tau=1):
+    '''
+    Compute delay embedding
+
+    Parameters
+    ----------
+    ts: list or np.array
+        Time series values
+    d: int
+        Dimension for delay embedding
+    tau: int
+        Delay for delay embedding
+
+    '''
     numpts = len(ts) - tau * (d-1)
 
     pts = [[ts[i+(j*tau)] for j in range(d) ] for i in range(numpts)]

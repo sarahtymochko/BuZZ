@@ -17,7 +17,9 @@ class PtClouds(object):
     ptclouds: list
         List of point clouds
     cplx_type: string (not case sensitive)
-        Type of complex you want to use. Options are Rips, Witness, Landmark. Defauly is Rips.
+        Type of complex you want to use. Options are Rips or Landmark. Default is Rips.
+    num_landmarks: int
+        Number of points to subsample. Default is None, meaning no subsampling.
     verbose: bool
         If true, prints updates when running code. Default is False.
 
@@ -70,7 +72,7 @@ class PtClouds(object):
         ----------
 
         num_landmarks: int
-            Number of points to subsample (default is None, meaning no subsampling)
+            Number of points to subsample. Default is None, meaning no subsampling.
         '''
 
         # No subsampling, use full point clouds
@@ -93,11 +95,10 @@ class PtClouds(object):
         Parameters
         ----------
 
-        k: int, optional
-            Maximum dimension simplex desired (default is 2)
-
         r: float or list of floats,
             Parameter for Rips complex on each point cloud. Can be a single number or a list with one value per point cloud.
+        k: int, optional
+            Maximum dimension simplex desired (default is 2)
 
         '''
 
@@ -151,33 +152,6 @@ class PtClouds(object):
         self.zigzag_time = zz_end - zz_st
 
 
-    # def run_Ripser(self,maxdim=1,thresh=np.inf):
-    #     '''
-    #     Function to run Ripser on all point clouds in the list and save them in the 'Dgms' column of the `ptclouds` attribute as a column of the DataFrame.
-    #
-    #     Parameters
-    #     ----------
-    #
-    #     maxdim: int, optional
-    #         Maximum homology dimension computed (default is 1)
-    #
-    #     thresh: float, optional
-    #         Maximum distances considered when constructing filtration (default is np.inf, meaning whole filtration is calculated)
-    #
-    #     '''
-    #     st_ripser = time.time()
-    #     dgms_list = []
-    #     for PC in list(self.ptclouds['PtCloud']):
-    #         diagrams = ripser(PC,maxdim=maxdim, thresh=thresh)['dgms']
-    #         dgms_dict = {i: diagrams[i] for i in range(len(diagrams))}
-    #
-    #         dgms_list.append(dgms_dict)
-    #
-    #     end_ripser = time.time()
-    #
-    #     if self.verbose:
-    #         print('Time to compute persistence: ', str(end_ripser-st_ripser))
-    #     self.ptclouds['Dgms'] = dgms_list
 
     def setup_Zigzag_fixed(self, r, k=2, verbose=False):
         '''
@@ -488,6 +462,12 @@ class PtClouds(object):
         savename: string
             Path to save figure (default is 'PC.png' in current directory)
 
+        v_plts: int
+            Number of plots in vertical direction
+
+        h_plts: int
+            Number of plots in horizontal direction
+
         '''
 
         if not hasattr(self,'ptclouds'):
@@ -566,6 +546,12 @@ class PtClouds(object):
         savename: string
             Path to save figure (default is 'PC_Full.png' in current directory)
 
+        v_plts: int
+            Number of plots in vertical direction
+
+        h_plts: int
+            Number of plots in horizontal direction
+
         '''
 
         if not hasattr(self,'ptclouds_full'):
@@ -642,6 +628,12 @@ class PtClouds(object):
 
         savename: string
             Path to save figure (default is 'Cplx.png' in current directory)
+
+        v_plts: int
+            Number of plots in vertical direction
+
+        h_plts: int
+            Number of plots in horizontal direction
 
         '''
 
