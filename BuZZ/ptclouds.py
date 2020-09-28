@@ -514,7 +514,7 @@ class PtClouds(object):
             v_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
             h_plts = 8
 
-        fig, axs = plt.subplots(v_plts, h_plts ,sharey=True, figsize=[h_plts*3,v_plts*3])
+        fig, axs = plt.subplots(v_plts, h_plts, sharex=True, sharey=True, figsize=[h_plts*2.5,v_plts*3])
         axs = axs.ravel()
 
         # Make color list
@@ -546,7 +546,7 @@ class PtClouds(object):
                 ax.set_xlim([xmin,xmax])
                 ax.set_ylim([ymin,ymax])
 
-        plt.tight_layout(pad=2.0)
+        plt.tight_layout() #pad=2.0)
 
         # Save figure
         if save:
@@ -592,7 +592,7 @@ class PtClouds(object):
             v_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
             h_plts = 8
 
-        fig, axs = plt.subplots(v_plts, h_plts ,sharey=True, figsize=[h_plts*3,v_plts*3])
+        fig, axs = plt.subplots(v_plts, h_plts ,sharey=True, sharex=True,figsize=[h_plts*2.5,v_plts*3])
         axs = axs.ravel()
 
         # Make color list
@@ -623,7 +623,7 @@ class PtClouds(object):
                 ax.set_xlim([xmin,xmax])
                 ax.set_ylim([ymin,ymax])
 
-        plt.tight_layout(pad=2.0)
+        plt.tight_layout()
 
         # Save figure
         if save:
@@ -675,7 +675,7 @@ class PtClouds(object):
             v_plts = int(np.ceil( (2*len(PC_list)-1)/ 8 ))
             h_plts = 8
 
-        fig, axs = plt.subplots(v_plts, h_plts ,sharey=True, figsize=[h_plts*3,v_plts*3])
+        fig, axs = plt.subplots(v_plts, h_plts ,sharey=True, sharex=True, figsize=[h_plts*2.5,v_plts*3])
         axs = axs.ravel()
 
         # Make color list
@@ -726,7 +726,7 @@ class PtClouds(object):
                     else:
                         axs[j].plot( [All_PC[vs[0]][0], All_PC[vs[1]][0]], [All_PC[vs[0]][1], All_PC[vs[1]][1]], c='k' )
 
-        plt.tight_layout(pad=2.0)
+        plt.tight_layout()
 
         # Save figure
         if save:
