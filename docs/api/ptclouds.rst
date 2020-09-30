@@ -8,4 +8,4 @@ zigzag persistence as described in :ref:`Background`.
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: fix_dio_vert_nums, getVerts, to_PD_Class
+   :exclude-members: fix_dio_vert_nums, get_verts, edit_Simp_Times

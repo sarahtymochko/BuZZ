@@ -2,7 +2,7 @@ import numpy as np
 import dionysus as dio
 import pandas as pd
 import matplotlib.pyplot as plt
-from BuZZ.utils import minmaxsubsample
+from BuZZ.utils import minmax_subsample
 import time
 from ripser import ripser
 import warnings
@@ -17,11 +17,11 @@ class PtClouds(object):
     ptclouds: list
         List of point clouds
     cplx_type: string (not case sensitive)
-        Type of complex you want to use. Options are Rips or Landmark. Default is Rips.
+        Type of complex you want to use. Options are Rips or Landmark (default is Rips)
     num_landmarks: int
-        Number of points to subsample. Default is None, meaning no subsampling.
+        Number of points to subsample (default is None, meaning no subsampling)
     verbose: bool
-        If true, prints updates when running code. Default is False.
+        If true, prints updates when running code (default is False)
 
     '''
 
@@ -72,7 +72,7 @@ class PtClouds(object):
         ----------
 
         num_landmarks: int
-            Number of points to subsample. Default is None, meaning no subsampling.
+            Number of points to subsample (default is None, meaning no subsampling)
         '''
 
         # No subsampling, use full point clouds
@@ -83,7 +83,7 @@ class PtClouds(object):
         # Subsample num_landmarks points from each point cloud using MinMax approach
         self.ptclouds = pd.DataFrame(columns=['PtCloud'])
         for i, pc in enumerate(self.ptclouds_full['PtCloud']):
-            self.ptclouds.loc[i,'PtCloud'] = minmaxsubsample(pc, num_landmarks, seed=None)
+            self.ptclouds.loc[i,'PtCloud'] = minmax_subsample(pc, num_landmarks, seed=None)
 
 
     def run_Zigzag(self, r, k=2):
@@ -102,7 +102,11 @@ class PtClouds(object):
 
         '''
 
-        self.k = k
+        if k > 2:
+            print('Oops, k>2 is not implemented. Setting back to 2.')
+            self.k = 2
+        else:
+            self.k = k
 
         # Type check r and see if need to use fixed or changing radius
         if type(r) == list:
@@ -236,7 +240,7 @@ class PtClouds(object):
             for simp in rips:
 
                 # Get list of vertices of simp
-                bdy = getVerts(simp)
+                bdy = get_verts(simp)
 
                 # If it has no boundary and its in B, its a vertex in B and has been handled
                 if not bdy:
@@ -378,7 +382,7 @@ class PtClouds(object):
             for simp in rips:
 
                 # Get list of vertices of simp
-                bdy = getVerts(simp) #set([s for s in simp.boundary()])
+                bdy = get_verts(simp) #set([s for s in simp.boundary()])
 
                 # If it has no boundary and its in B, its a vertex in B and has been handled
                 if not bdy:
@@ -452,7 +456,7 @@ class PtClouds(object):
 
     def plot_ZZ_PtClouds(self, save=False, savename='PC.png', v_plts=None, h_plts=None):
         '''
-        Plot the point clouds used
+        Plot the zigzag of point clouds.
 
         Parameters
         ----------
@@ -536,7 +540,8 @@ class PtClouds(object):
 
     def plot_ZZ_Full_PtClouds(self, save=False, savename='PC_Full.png', v_plts=None, h_plts=None):
         '''
-        Plot the point clouds used
+        Plot the zigzag of full point clouds.
+        Only needed if using landmark complex and want to plot the full point clouds before subsampling.
 
         Parameters
         ----------
@@ -619,7 +624,7 @@ class PtClouds(object):
 
     def plot_ZZ_Cplx(self, save=False, savename='Cplx.png'):
         '''
-        Plot the complexes used for the zigzag
+        Plot the zigzag of rips complexes.
 
         Parameters
         ----------
@@ -728,6 +733,28 @@ class PtClouds(object):
 
 
 def edit_Simp_Times(simp,new_bd_times,simps_list,times_list):
+    '''
+    Helper function to adjust appearance/disappearance times of a particular simplex.
+
+    Parameters
+    ----------
+    simp: dio.Simplex
+        Simplex to modify time for
+    new_bd_times: list
+        New appearance and disappearance times
+    simps_list: list
+        Current list of simplices
+    times_list: list of lists
+        Current list of times lists
+
+    Returns
+    -------
+    simps_list: list
+        Updated list of simplices
+    times_list: list of lists
+        Updated list of times lists
+
+    '''
 
     # Find where it is in the list
     simp_ind = simps_list.index(simp)
@@ -769,7 +796,7 @@ def fix_dio_vert_nums(Cplx, vertind):
         New_Cplx.append(s)
     return New_Cplx
 
-def getVerts(simp):
+def get_verts(simp):
     '''
     Helper function to get all vertices of the input simplex
 

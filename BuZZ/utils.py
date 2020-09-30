@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
 import random
 
-def minmaxsubsample(pts, n, seed=3):
+def minmax_subsample(pts, n, seed=3):
     '''
     Subsample points using greedy permutation algorithm.
 
@@ -11,9 +11,9 @@ def minmaxsubsample(pts, n, seed=3):
     pts: np.array
         Points in point cloud.
     n: int
-        Number of points to subsample. Default is None, meaning no subsampling.
+        Number of points to subsample (default is None, meaning no subsampling)
     seed: int
-        Seed for random generation of starting point.
+        Seed for random generation of starting point
 
     '''
 

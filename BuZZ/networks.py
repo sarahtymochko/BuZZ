@@ -23,7 +23,7 @@ class Networks(object):
     cplx_type: string
         Type of zigzag, options are 'intersection' or 'union'
     verbose: bool
-        If true, prints updates when running code. Default is False.
+        If true, prints updates when running code (default is False)
 
     '''
 
@@ -90,9 +90,6 @@ class Networks(object):
 
         k: int, optional
             Max dimension for rips complex (default is 2)
-
-        verbose: bool, optional
-            If true, prints updates when running code
 
         Returns
         -------
@@ -284,13 +281,12 @@ def build_network(ts, d, tau, directed=True):
 
     Parameters
     ----------
-
     d: int
         Dimension
     tau: int
         Delay
     directed: bool (optional)
-        Set to False to use undirected network. Default is True.
+        Set to False to use undirected network (default is True)
 
     Returns
     -------
