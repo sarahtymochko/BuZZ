@@ -622,7 +622,7 @@ class PtClouds(object):
             plt.savefig(savename, dpi=500, bbox_inches='tight')
 
 
-    def plot_ZZ_Cplx(self, save=False, savename='Cplx.png'):
+    def plot_ZZ_Cplx(self, save=False, savename='Cplx.png', v_plts=None, h_plts=None):
         '''
         Plot the zigzag of rips complexes.
 
