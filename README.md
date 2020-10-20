@@ -11,6 +11,7 @@ See Examples folder for examples of usage.
 ## Installation
 
 Will be improved eventually, but for now add to your ``.bashrc``:
+
 ```export PYTHONPATH="${PYTHONPATH}:/path/to/BuZZ"```
 
 ## Requirements
