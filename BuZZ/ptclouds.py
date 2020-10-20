@@ -274,7 +274,7 @@ class PtClouds(object):
 
         loop_end = time.time()
         if verbose:
-            print(f'Loop done in {loop_end-loop_st} seconds...')
+            print(f'Preprocessing done in {loop_end-loop_st} seconds...')
 
         f_st = time.time()
         filtration = dio.Filtration(simps_list)
@@ -445,7 +445,7 @@ class PtClouds(object):
 
         loop_end = time.time()
         if verbose:
-            print(f'Loop done in {loop_end-loop_st} seconds...')
+            print(f'Preprocessing done in {loop_end-loop_st} seconds...')
 
         # Put list of simplices into Filtration format
         filtration = dio.Filtration(simps_list)
