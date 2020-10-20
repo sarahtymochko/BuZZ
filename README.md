@@ -8,6 +8,10 @@ This package provides python code to compute zigzag persistence from point cloud
 
 See Examples folder for examples of usage.
 
+## Installation
+
+Will be improved eventually, but for now add to your ``.bashrc``:
+```export PYTHONPATH="${PYTHONPATH}:/path/to/BuZZ"```
 
 ## Requirements
 
