@@ -1,6 +1,6 @@
 # Bifurcations using ZigZag (BuZZ)
 
-**Documentation improvements coming soon :)**
+** NOTE! BuZZ has been moved to a new home. It is now kept in [teaspoon](https://github.com/lizliz/teaspoon). Documentation can be found [here](https://lizliz.github.io/teaspoon/buzz.html) **
 
 ## Description
 
